@@ -8,7 +8,7 @@ class ProjectsController < ApplicationController
   	@project = Project.new( project_params)
   	@project[:user_id] = current_user.id
   	if @project.save
-  		Collaborator.create(:project_id => @project.id , :user_id => current_user.id)
+  		Collaboration.create(:project_id => @project.id , :user_id => current_user.id)
   		flash[:success]  = "project Added"
   		redirect_to root_url
   	else

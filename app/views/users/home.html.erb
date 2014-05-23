@@ -1,0 +1,31 @@
+<h1> Project Listing </h1>
+<% owned_projects = current_user.projects %>
+<% collaborating_projects = current_user.collaborating_projects %>
+<div class="row" >
+	<% owned_projects.each do %> 
+		<% |own| %>
+		<aside class="span4">
+			<%= own.name %>
+		</aside>
+		<div class="span5">
+			<%= own.description %>
+			<%= link_to "view" , own ,method: :get  %>
+			<%= link_to "delete" , own ,method: :delete,data: { confirm: "You sure?"}   %>
+		</div>
+	<%end%>
+
+	<% collaborating_projects.each do %> 
+		<% |own| %>
+		<% unless collaborating_projects.include? own %>
+			<aside class="span4">
+				<%= own.name %>
+			</aside>
+			<div class="span5">
+				<%= own.description %>
+				<%= link_to "view" , own ,method: :get  %>
+			</div>
+		<%end%>
+	<%end%>
+
+
+</div>

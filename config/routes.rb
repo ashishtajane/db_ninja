@@ -1,11 +1,11 @@
 DbNinja::Application.routes.draw do
   devise_for :users
   resources :projects
-  get "mains/home"
-  get "mains/help"
+  get "users/home"
+  get "users/help"
 
   
-  root to: 'mains#home'
+  root to: 'users#home'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

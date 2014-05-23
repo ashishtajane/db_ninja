@@ -11,26 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140523114154) do
+ActiveRecord::Schema.define(version: 20140523122248) do
 
-  create_table "accesses", force: true do |t|
-    t.integer  "project_id"
-    t.integer  "collaboration_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "collaborators", force: true do |t|
-    t.integer  "project_id"
+  create_table "collaborations", force: true do |t|
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "project_models", force: true do |t|
     t.integer  "project_id"
-    t.string   "model_name"
-    t.string   "table_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -58,8 +43,8 @@ ActiveRecord::Schema.define(version: 20140523114154) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "name"
   end
 
