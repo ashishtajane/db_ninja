@@ -1,4 +1,10 @@
 DbNinja::Application.routes.draw do
+  devise_for :users
+  get "mains/home"
+  get "mains/help"
+
+  
+  root to: 'mains#home'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

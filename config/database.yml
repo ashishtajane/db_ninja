@@ -15,8 +15,8 @@ development:
   database: db_ninja_development
   pool: 5
   username: root
-  password:
-  socket: /tmp/mysql.sock
+  password: dev
+  #socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -28,8 +28,8 @@ test:
   database: db_ninja_test
   pool: 5
   username: root
-  password:
-  socket: /tmp/mysql.sock
+  password: dev
+  #socket: /tmp/mysql.sock
 
 production:
   adapter: mysql2
@@ -38,5 +38,5 @@ production:
   database: db_ninja_production
   pool: 5
   username: root
-  password:
-  socket: /tmp/mysql.sock
+  password: dev
+  #socket: /tmp/mysql.sock

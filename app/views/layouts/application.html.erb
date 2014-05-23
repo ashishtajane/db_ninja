@@ -2,13 +2,21 @@
 <html>
 <head>
   <title>DbNinja</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag "application", media: "all",
+                                           "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+<%= render 'layouts/header' %>
+<div class="container" style="margin-top: 50px">
+	<% flash.each do |key, value| %>
+	    <div class="alert alert-<%= key %>"><%= value %></div>
+	<% end %>
+  	<%= yield %>
+	<%= debug(params) if Rails.env.development? %>
+</div>
 
-<%= yield %>
 
 </body>
 </html>
