@@ -2,11 +2,12 @@
 <div> 
 	Host <%= @project.host%> <br>
 	Owner <%= @project.user.name%> <br>
-	<h2> Collaborators </h2>
-	<div class = "row">
-		<%@project.collaborating_users.each do%>
-		<% |user| %>
-		<%= user.name %>
-		<%end%>
-	</div>
+
+	<ul class="nav nav-tabs nav-justified">
+  		<li class="active"><a href="#">Home</a></li>
+		<li><a href="#">Profile</a></li>
+		<li><a href="#">Messages</a></li>
+	</ul>
+
+	
 </div>
