@@ -1,0 +1,30 @@
+<h1>Add a New Project</h1>
+
+<div class="row">
+  <div class="span2 ">
+    <%= form_for(@project) do |f| %>
+
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.label :project_name %>
+      <%= f.text_field :name %>
+
+      <%= f.label :project_description %>
+      <%= f.text_field :description %>
+
+      <%= f.label :host_ip %>
+      <%= f.text_field :host %>
+
+      <%= f.label :adapter_used_for_your_application %>
+      <%= f.text_field :adapter %>
+
+      <%= f.label :database_username %>
+      <%= f.text_field :dbusername %>
+
+      <%= f.label :database_password %>
+      <%= f.password_field :dbpassword %>
+
+      <%= f.submit "Create my project", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

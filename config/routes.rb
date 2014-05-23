@@ -1,5 +1,6 @@
 DbNinja::Application.routes.draw do
   devise_for :users
+  resources :projects
   get "mains/home"
   get "mains/help"
 

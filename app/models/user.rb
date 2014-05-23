@@ -1,4 +1,8 @@
 class User < ActiveRecord::Base
+  has_many :projects
+  has_many :collaborators , dependent: :destroy
+  has_many :involved_projects, through: :collaborators, source: :project
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

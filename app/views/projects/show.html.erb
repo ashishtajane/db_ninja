@@ -1,0 +1,13 @@
+<h1> Project Information </h1>
+<div> 
+	Host <%= @project.host%> <br>
+	Owner <%= @project.user.name%> <br>
+	<h2> Collaborators </h2>
+	<div class = "row">
+		<%@project.helping_users.each do%>
+		<% |user| %>
+		<%= user.name %>
+		<%= link_to "view" , user , method: get%>
+		<%end%>
+	</div>
+</div>
