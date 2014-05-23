@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140523093912) do
+ActiveRecord::Schema.define(version: 20140523114154) do
 
   create_table "accesses", force: true do |t|
     t.integer  "project_id"
@@ -23,6 +23,14 @@ ActiveRecord::Schema.define(version: 20140523093912) do
   create_table "collaborators", force: true do |t|
     t.integer  "project_id"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "project_models", force: true do |t|
+    t.integer  "project_id"
+    t.string   "model_name"
+    t.string   "table_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
