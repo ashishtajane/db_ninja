@@ -1,13 +1,56 @@
 <h1> Project Information </h1>
 <div> 
-	Host <%= @project.host%> <br>
-	Owner <%= @project.user.name%> <br>
+	
 
-	<ul class="nav nav-tabs nav-justified">
-  		<li class="active"><a href="#">Home</a></li>
-		<li><a href="#">Profile</a></li>
-		<li><a href="#">Messages</a></li>
-	</ul>
+	<ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#info">Project Information</a></li>
+        <li><a data-toggle="tab" href="#coll">Collaborators</a></li>
+        <li><a data-toggle="tab" href="#table">Tables</a></li>
+        <li><a data-toggle="tab" href="#addtable">Add Tables</a></li>
+        <% if current_user == @project.user %>
+        	<div class="navbar-search pull-right">
+                <%= form_tag(collaborations_path, method: "post") do %>
+                  Email <%= text_field_tag(:email) %>
+                  <%= hidden_field_tag :pid, @project.id %>
+                  <%= submit_tag("Add") %>
+                <% end %>
+    			<!-- <input type="text" class="search-query" placeholder="Add Collaborator"> -->
+    		</div>
+        <%end%>
+    </ul>
 
+
+    <div class="tab-content">
+        <div id="info" class="tab-pane fade in active">
+
+            <h3>Project Information</h3>
+            <div class="row">
+	            <div class="span4" > Host </div>
+	            <div class="span4"> <%= @project.host%> <br></div>
+
+	            <div class="span4" > Owner</div> 
+	            <div class="span4"><%= @project.user.name%> <br></div>
+        	</div>
+			
+        </div>
+        <div id="coll" class="tab-pane fade">
+            <h3>Collaborators</h3>
+            <div class = "row">
+				<%@project.collaborating_users.each do%>
+				<% |user| %>
+				<div class="span8"><%= user.name %></div>
+				<%end%>
+			</div>
+        </div>
+        <div id="table" class="tab-pane fade">
+            <h3>Section C</h3>
+            <p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
+        </div>
+
+        <div id="addtable" class="tab-pane fade">
+            <h3>Section D</h3>
+            <p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
+        </div>
+    </div>
 	
 </div>

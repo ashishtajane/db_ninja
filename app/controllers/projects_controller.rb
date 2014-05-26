@@ -25,6 +25,12 @@ class ProjectsController < ApplicationController
   def edit
   end
 
+  def collaborators
+    # debugger
+    @collaborators=Project.find_by(params[:id].to_i).collaborating_users
+    render 'collaborations'
+  end
+
   private
 
   def project_params

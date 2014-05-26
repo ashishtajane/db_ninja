@@ -10,5 +10,12 @@ class UsersController < ApplicationController
 
   def index
   end
-  
+
+  def autocomplete
+	@posts = Post.autocomplete(:name, params[:q])
+	respond_to do |format|
+	  format.json { render json: @posts }
+	end
+  end
+
 end
