@@ -20,6 +20,7 @@ class EntitiesController < ApplicationController
   end
 
   def show
+    
   end
 
   def update

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140526073648) do
+ActiveRecord::Schema.define(version: 20140526133815) do
 
   create_table "collaborations", force: true do |t|
     t.integer  "user_id"
@@ -24,6 +24,17 @@ ActiveRecord::Schema.define(version: 20140526073648) do
     t.integer  "project_id"
     t.string   "model_name"
     t.string   "table_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "fields", force: true do |t|
+    t.string   "name"
+    t.integer  "type"
+    t.integer  "type_arg1"
+    t.integer  "type_arg2"
+    t.boolean  "null_value"
+    t.string   "default"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
