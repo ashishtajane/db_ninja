@@ -12,7 +12,7 @@
     </li>
         
     <li>
-      <%= link_to("Tables",  project_entitys_path(Project.find(params[:project_id].to_i))  , data: {toggle: ""} ) %>
+      <%= link_to("Tables",  project_entities_path(Project.find(params[:project_id].to_i))  , data: {toggle: ""} ) %>
     </li>
 
     <%project=Project.find(params[:project_id].to_i)%>

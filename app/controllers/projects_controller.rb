@@ -27,11 +27,6 @@ class ProjectsController < ApplicationController
 
   
 
-  def entitys
-    @entitys = Project.find_by(params[:id].to_i).entitys
-    redirect_to 
-  end
-
   private
 
   def project_params
