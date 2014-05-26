@@ -25,10 +25,11 @@ class ProjectsController < ApplicationController
   def edit
   end
 
-  def collaborators
-    # debugger
-    @collaborators=Project.find_by(params[:id].to_i).collaborating_users
-    render 'collaborations'
+  
+
+  def entitys
+    @entitys = Project.find_by(params[:id].to_i).entitys
+    redirect_to 
   end
 
   private

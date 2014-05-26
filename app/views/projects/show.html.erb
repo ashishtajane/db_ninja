@@ -6,10 +6,9 @@
         <li class="active"><a data-toggle="tab" href="#info">Project Information</a></li>
         <li><a data-toggle="tab" href="#coll">Collaborators</a></li>
         <li><a data-toggle="tab" href="#table">Tables</a></li>
-        <li><a data-toggle="tab" href="#addtable">Add Tables</a></li>
         <% if current_user == @project.user %>
         	<div class="navbar-search pull-right">
-                <%= form_tag(collaborations_path, method: "post") do %>
+                <%= form_tag(project_collaborations_path(@project), method: "post") do %>
                   Email <%= text_field_tag(:email) %>
                   <%= hidden_field_tag :pid, @project.id %>
                   <%= submit_tag("Add") %>
@@ -47,10 +46,6 @@
             <p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
         </div>
 
-        <div id="addtable" class="tab-pane fade">
-            <h3>Section D</h3>
-            <p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
-        </div>
     </div>
 	
 </div>

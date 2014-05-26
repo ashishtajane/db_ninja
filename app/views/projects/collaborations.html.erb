@@ -8,7 +8,6 @@
         </li>
         <li class="active"><a data-toggle="tab" href="#coll">Collaborators</a></li>
         <li><a data-toggle="tab" href="#table">Tables</a></li>
-        <li><a data-toggle="tab" href="#addtable">Add Tables</a></li>
         <%project=Project.find(params[:id].to_i)%>
         <% if current_user == project.user %>
         	<div class="navbar-search pull-right">
@@ -40,9 +39,6 @@
             
         </div>
 
-        <div id="addtable" class="tab-pane fade">
-            
-        </div>
     </div>
 	
 </div>

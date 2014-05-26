@@ -1,0 +1,11 @@
+<h1>Add a New Table</h1>
+
+<div class="row">
+  <div class="span2 ">
+    <%= form_tag(project_entitys_path(Project.find(params[:project_id])), method: "post") do%>
+      Model Name <%= text_field_tag(:model_name) %>
+      Table Name <%= text_field_tag(:table_name) %>
+      <%= submit_tag("Add") %>
+    <% end %>
+  </div>
+</div>
