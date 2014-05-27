@@ -8,7 +8,6 @@ end
 
 def add_db
   Datatype.create(:name => "INT" , :arg=> 0)
-  Datatype.create(:name => "INT" , :arg=> 0)
   Datatype.create(:name => "TINYINT" , :arg=> 0)
   Datatype.create(:name => "SMALLINT"  , :arg=> 0)
   Datatype.create(:name => "MEDIUMINT" , :arg=> 0)

@@ -1,15 +1,11 @@
-<div class="container">
-	<%=link_to "Edit Profile",'#'%>
-	<%=link_to "Add Project",'#'%>
-	
-</div>
-
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
     <div class="container">
       <nav>
-        <ul class="nav pull-right">
-          <li><%= link_to "Home", root_path %></li>
+        <ul class="nav navbar-nav pull-right">
+          <li>
+            <%= link_to "Home", root_path %>
+          </li>
             <% if user_signed_in? %>          
               <li id="fat-menu" class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">

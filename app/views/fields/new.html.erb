@@ -1,31 +1,21 @@
-  <script>
-    function favBrowser()
-    {
-      var mylist=document.getElementById("myList");
+<div class= "container">
+  <h1>
+    Add a new column
+  </h1>
+  <div class="row">
+    <div class="span6">
+      <%= form_tag(project_entity_fields_path( @project , @entity ) , method: "post") do %>
 
-      document.getElementById("favorite").value=mylist.options[mylist.selectedIndex].text;
-    }
-    function reply_click(clicked_id)
-    {
-      alert(clicked_id);
-    }
-  </script>
+        Attribute Name <%= text_field_tag(:name) %> 
+        Default <%= text_field_tag(:default) %>
+        Can it be Null <%= select_tag( :null_id, options_for_select( [["Yes", "1"],["No","0"]] ) ) %>
+        <%= select_tag( :type_name, options_for_select( @types.collect {|d| [d.name, {id: d.arg.to_s , onclick:"hideshow(this.id);"}] } ) ) %>
 
+        <div id="arg1" style="display:none">First Argument <%= text_field_tag(:type_arg1)%></div>
+        <div id="arg2" style="display:none">Second Argument <%= text_field_tag(:type_arg2) %></div>
+        <%= submit_tag("Add") %>
 
-
-<h1>Add a new column</h1>
-<div class="row">
-  <div class="span2 ">
-    
-    <%= form_tag(project_entity_fields_path( @project , @entity ) , method: "post") do %>
-      Attribute Name <%= text_field_tag(:name) %>
-      Default <%= text_field_tag(:default) %>
-
-      <%= select_tag( :city_id, options_for_select( @type.collect {|d| [d.name, d.id] } ) ) %>
-
-      First Arguement  <%= text_field_tag(:name) %>
-      <%= submit_tag("Add") %>
-    <% end %>
-
+      <% end %>
+    </div>
   </div>
 </div>

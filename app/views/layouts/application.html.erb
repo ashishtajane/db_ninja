@@ -11,7 +11,7 @@
 <%= render 'layouts/header' %>
 <div class="container" style="margin-top: 50px">
 	<% flash.each do |key, value| %>
-	    <div class="alert alert-<%= key %>"><%= value %></div>
+    <div class="alert alert-<%= key %>"><%= value %></div>
 	<% end %>
   	<%= yield %>
 	<%= debug(params) if Rails.env.development? %>
