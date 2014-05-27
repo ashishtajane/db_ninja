@@ -1,0 +1,31 @@
+  <script>
+    function favBrowser()
+    {
+      var mylist=document.getElementById("myList");
+
+      document.getElementById("favorite").value=mylist.options[mylist.selectedIndex].text;
+    }
+    function reply_click(clicked_id)
+    {
+      alert(clicked_id);
+    }
+  </script>
+
+
+
+<h1>Add a new column</h1>
+<div class="row">
+  <div class="span2 ">
+    
+    <%= form_tag(project_entity_fields_path( @project , @entity ) , method: "post") do %>
+      Attribute Name <%= text_field_tag(:name) %>
+      Default <%= text_field_tag(:default) %>
+
+      <%= select_tag( :city_id, options_for_select( @type.collect {|d| [d.name, d.id] } ) ) %>
+
+      First Arguement  <%= text_field_tag(:name) %>
+      <%= submit_tag("Add") %>
+    <% end %>
+
+  </div>
+</div>

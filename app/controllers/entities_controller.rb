@@ -20,7 +20,10 @@ class EntitiesController < ApplicationController
   end
 
   def show
-    
+    @entity = Entity.find(params[:id])
+    @fields = @entity.fields
+    @owner = @entity.project.user
+    #debugger
   end
 
   def update

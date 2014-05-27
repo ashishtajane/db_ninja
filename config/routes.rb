@@ -8,7 +8,9 @@ DbNinja::Application.routes.draw do
 
   resources :projects do
     resources :collaborations
-    resources :entities
+    resources :entities do
+      resources :fields
+    end
   end
   # The priority is based upon order of creation:
   # first created -> highest priority.
