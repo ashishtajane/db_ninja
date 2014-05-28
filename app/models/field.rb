@@ -1,10 +1,12 @@
 class Field < ActiveRecord::Base
   has_one :datatype
-	belongs_to :entity
+  belongs_to :entity
   validates :name, presence: true
   validates :null_value , presence: true
   validate :type_check
   validates :entity_id, presence: true
+  validates :entity_id, uniqueness: { scope: :name,message: "Already Present" }
+
   attr_accessible :name, :default, :null_value , :entity_id , :datatype_id , :type_arg1 , :type_arg2
 
 
@@ -12,9 +14,11 @@ class Field < ActiveRecord::Base
   def type_check
     db = Datatype.find(self.datatype_id)
     if db.arg == 1
-      db.type_arg1.present?
-    elsif db.arg==2
-      db.type_arg1.present? && db.type_arg2.present?
+      !(self.type_arg1.empty?)
+    elsif db.arg == 2
+      !(self.type_arg1.empty?) && !(self.type_arg2.empty?)
+    else
+      true
     end
   end
 end

@@ -1,7 +1,7 @@
 DbNinja::Application.routes.draw do
   devise_for :users
   get "users/home"
-  get "users/help"
+  get "users/list"
 
   
   root to: 'users#home'

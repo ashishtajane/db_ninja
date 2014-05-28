@@ -13,21 +13,23 @@
     </tr>  
   </thead>  
   <tbody>  
-    <% @fields.each do %>
-      <% |field| %>
+    <% @fields.each do |field|%>
+      <% name = Datatype.find(field.datatype_id).name %>
         <tr>  
-          <td><%=@field.name%></td>  
-          <% if !(@field.type_arg1.nil? or @field.type_arg2.nil? ) %>
-            <td><%=@field.type(@field.type_arg1,@field.type_arg2)%></td>  
-          <% elsif  !(@field.type_arg1.nil?) %>
-            <td><%=@field.type(@field.type_arg1)%></td> 
+          <td><%=field.name%></td>  
+          
+          <% if !(field.type_arg1.empty?) && !(field.type_arg2.empty?) %>
+            <td><%= name.to_s + "(" + field.type_arg1.to_s + "," + field.type_arg2.to_s + ")" %></td>  
+          <% elsif  !(field.type_arg1.empty?) %>
+            <td><%= name.to_s + "(" + field.type_arg1.to_s + ")" %>%></td> 
           <%else%>
-            <td><%=@field.type%></td> 
+            <td><%=name.to_s%></td> 
           <%end%>
-          <td><%=@field.null_value%></td>
-          <td><%=@field.default%></td>  
+
+          <td><%=field.null_value%></td>
+          <td><%=field.default%></td>  
           <% if current_user == @owner %>
-            <td> <%=link_to "delete",project_entity_field_path(@field) ,method: "delete"%></td>
+            <td> <%=link_to "delete",project_entity_field_path(field) ,method: "delete"%></td>
           <%end%>
         </tr>
     <%end%>  

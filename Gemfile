@@ -17,7 +17,7 @@ gem 'mysql2'
 gem 'devise'
 gem 'protected_attributes'
 group :development, :test do
-	gem 'railroady'
+  gem 'railroady'
   gem 'sqlite3', '1.3.8'
   gem 'rspec-rails', '2.13.1'
   gem 'debugger'

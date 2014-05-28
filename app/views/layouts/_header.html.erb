@@ -7,6 +7,12 @@
             <%= link_to "Home", root_path %>
           </li>
             <% if user_signed_in? %>          
+              <li>
+                <%= link_to "Add Project", new_project_path %> 
+              </li>
+              <li>
+                <%= link_to "Users", users_list_path %> 
+              </li>
               <li id="fat-menu" class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       Account<b class="caret"></b>
