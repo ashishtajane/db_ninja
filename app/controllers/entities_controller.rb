@@ -1,5 +1,11 @@
 class EntitiesController < ApplicationController
 
+  before_action :get_instance_variables ,only: [:new,:index,:show,:update,:edit]
+  before_action :get_entity , only: [:show,:update,:edit]
+  before_action :check_collaborator,only: [:index,:show,:update,:edit]
+  before_action :check_owner , only: [:new]
+  before_action :check_url, only: [:show,:update,:edit]
+
   def index
     @entities = Project.find(params[:project_id]).entities
   end
@@ -20,10 +26,7 @@ class EntitiesController < ApplicationController
   end
 
   def show
-    @entity = Entity.find(params[:id])
     @fields = @entity.fields
-    @owner = @entity.project.user
-    #debugger
   end
 
   def update
@@ -32,5 +35,15 @@ class EntitiesController < ApplicationController
   def edit
   end
 
+  private
+
+    def get_instance_variables
+      @project = Project.find(params[:project_id])
+      @owner = @project.user
+    end
+
+    def get_entity
+      @entity = Entity.find(params[:id])
+    end
 
 end

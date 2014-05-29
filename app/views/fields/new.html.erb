@@ -9,7 +9,9 @@
         Attribute Name <%= text_field_tag(:name) %> 
         Default <%= text_field_tag(:default) %>
         Can it be Null <%= select_tag( :null_id, options_for_select( [["Yes", "1"],["No","0"]] ) ) %>
-        <%= select_tag( :type_name, options_for_select( @types.collect {|d| [d.name, {id: d.arg.to_s , onclick:"hideshow(this.id);"}] } ) ) %>
+        <%#= select_tag( :type_name,options_for_select( @types.collect {|d| [d.name, {id: d.arg.to_s , onclick:"hideshow(this.id);"}] } ) ) %>
+
+        <%=collection_select(:type, :name, Datatype.find(:all), :name,:name,{},{ name: "type_name" ,onchange: "hideshow(this.value);"})%>
 
         <div id="arg1" style="display:none">First Argument <%= text_field_tag(:type_arg1)%></div>
         <div id="arg2" style="display:none">Second Argument <%= text_field_tag(:type_arg2) %></div>

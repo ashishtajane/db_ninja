@@ -17,7 +17,7 @@
       <% name = Datatype.find(field.datatype_id).name %>
         <tr>  
           <td><%=field.name%></td>  
-          
+
           <% if !(field.type_arg1.empty?) && !(field.type_arg2.empty?) %>
             <td><%= name.to_s + "(" + field.type_arg1.to_s + "," + field.type_arg2.to_s + ")" %></td>  
           <% elsif  !(field.type_arg1.empty?) %>
@@ -29,7 +29,7 @@
           <td><%=field.null_value%></td>
           <td><%=field.default%></td>  
           <% if current_user == @owner %>
-            <td> <%=link_to "delete",project_entity_field_path(field) ,method: "delete"%></td>
+            <td> <%=link_to "delete",project_entity_field_path(@project,@entity,field) ,method: "delete"%></td>
           <%end%>
         </tr>
     <%end%>  

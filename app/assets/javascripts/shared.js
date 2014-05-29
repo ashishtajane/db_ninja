@@ -1,10 +1,11 @@
-function hideshow(idvalue)
+function hideshow(id)
 {
-  alert(idvalue)
-  if (idvalue=="1"){
+  alert(id)
+  if (id=="1"){
     document.getElementById('arg1').style.display = 'block';
+    document.getElementById('arg2').style.display = 'none';
   }
-  else if(idvalue=="2"){
+  else if(id=="2"){
     document.getElementById('arg1').style.display = 'block';
     document.getElementById('arg2').style.display = 'block';
   }
@@ -12,4 +13,8 @@ function hideshow(idvalue)
     document.getElementById('arg1').style.display = 'none';
     document.getElementById('arg2').style.display = 'none'; 
   }
+}
+function test(idval)
+{
+  alert(idval)
 }
