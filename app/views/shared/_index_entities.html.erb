@@ -1,0 +1,24 @@
+<%if  @entities.any? %>
+  <table class="table table-striped">
+    <thead>  
+      <tr>  
+        <th>Model Name</th>  
+        <th>Table Name</th> 
+        <% if current_user == @owner %>
+          <th>Delete</th>
+        <%end%>
+      </tr>
+    </thead>  
+    <tbody>  
+      <%@entities.each do |ent| %>
+        <%= render partial: 'shared/display_entity' , locals: {entity: ent} %>
+      <%end%>
+    </tbody>  
+  </table> 
+<%else%>
+  Currently no tables are there.
+<%end%>
+
+<div style = "padding: 20px 0 0 0">
+  <%=link_to "Add Tables",new_project_entity_path %>
+</div>  

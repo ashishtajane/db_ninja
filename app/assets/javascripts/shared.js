@@ -1,6 +1,6 @@
 function hideshow(id)
 {
-  alert(id)
+  //alert($(this).find('option:selected').text());
   if (id=="1"){
     document.getElementById('arg1').style.display = 'block';
     document.getElementById('arg2').style.display = 'none';
@@ -14,7 +14,23 @@ function hideshow(id)
     document.getElementById('arg2').style.display = 'none'; 
   }
 }
-function test(idval)
-{
-  alert(idval)
+
+ready = function(){
+
+$("#type_name").bind('click', function() {
+  //alert($('#type_name').children(":selected").attr('value'));    
+  //alert($(this).attr('data-arg'))
+  hideshow($('#type_name').children(":selected").attr('data-arg'));
+});
+
+
+$("#type_name").bind('focusout', function() {
+  //alert($('#type_name').children(":selected").attr('value'));
+  hideshow($('#type_name').children(":selected").attr('data-arg'));
+});
+
+hideshow($('#type_name').children(":selected").attr('data-arg'));
+
 }
+$(document).ready(ready)
+$(document).on('page:load', ready)

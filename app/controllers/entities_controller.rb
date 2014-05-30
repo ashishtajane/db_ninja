@@ -1,6 +1,6 @@
 class EntitiesController < ApplicationController
 
-  before_action :get_instance_variables ,only: [:new,:index,:show,:update,:edit]
+  before_action :get_instance_variables ,only: [:new,:index,:show,:update,:edit,:destroy]
   before_action :get_entity , only: [:show,:update,:edit]
   before_action :check_collaborator,only: [:index,:show,:update,:edit]
   before_action :check_owner , only: [:new]
@@ -33,6 +33,11 @@ class EntitiesController < ApplicationController
   end
 
   def edit
+  end
+
+  def destroy
+    Entity.find(params[:id]).destroy
+    redirect_to project_entities_path(@project)
   end
 
   private

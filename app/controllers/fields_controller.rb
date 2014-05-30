@@ -13,9 +13,10 @@ class FieldsController < ApplicationController
   end
 
   def create
-    debugger
+    #debugger
     @type = Datatype.find_by_name(params[:type_name])
-    #@field = Field.new(:name => params[:name] , :default => params[:default] , :null_value => boolval(params[:null_id].to_i), :datatype_id => @type.id, :entity_id => params[:entity_id].to_i, :type_arg1 => params[:type_arg1], :type_arg2 => params[:type_arg2] )
+    #debugger
+    @field = Field.new(:name => params[:name] , :default => params[:default] , :null_value => boolval(params[:null_id].to_i), :datatype_id => @type.id, :entity_id => params[:entity_id].to_i, :type_arg1 => params[:type_arg1], :type_arg2 => params[:type_arg2] )
     if @field.save
       flash.now[:success]  = "Field Added"
       redirect_to project_entity_path(@project,@entity)
@@ -32,6 +33,11 @@ class FieldsController < ApplicationController
   end
 
   def edit
+  end
+
+  def destroy
+    Field.find(params[:id]).destroy
+    redirect_to project_entity_path(@project,@entity)
   end
 
   private

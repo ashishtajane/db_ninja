@@ -1,0 +1,19 @@
+<table class="table table-striped">
+
+  <thead>  
+    <tr>  
+      <th>Name</th>  
+      <th> Email</th>
+    </tr>  
+  </thead> 
+
+  <tbody>  
+    <% users.each  do |user| %>
+      <tr>  
+        <%= render partial: 'shared/print_user' , locals: {user: user}%>
+      </tr>
+    <%end%>
+  </tbody> 
+
+</table>
+<%=will_paginate users%>

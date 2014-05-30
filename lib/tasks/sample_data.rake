@@ -1,12 +1,12 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
-    # add_db
-    # user_pop
-    # project_pop
-    # add_collaborators
-    # add_entity
-    # add_fields_to_entity
+    add_db
+    user_pop
+    project_pop
+    add_collaborators
+    add_entity
+    add_fields_to_entity
   end
 end
 
@@ -47,7 +47,7 @@ def project_pop
   counter = 0
   6.times do |user|
     2.times do |project|
-      Project.create(:name => "project#{user}#{project}" , :description => "project#{user}#{project} for demo" , :user_id => user , :host =>"100.23.142.12",:adapter => "mysql2" ,:dbusername => "db#{user}#{project}" ,:dbpassword =>"password#{user}#{project}" , :dbname => "name#{user}#{project}")
+      Project.create(:name => "project#{user}#{project}" , :description => "project#{user}#{project} for demo" , :user_id => user+1 , :host =>"100.23.142.12",:adapter => "mysql2" ,:dbusername => "db#{user}#{project}" ,:dbpassword =>"password#{user}#{project}" , :dbname => "name#{user}#{project}")
     end
   end
 end
@@ -72,14 +72,37 @@ def add_entity
 end
 
 def find(a,b)
-  a + rand(b) % (b-a+1)
+  a + rand(1000000) % (b-a+1)
 end
 
 def add_fields_to_entity
+  counter = 0
   entities = Entity.all
   entities.each do |entity|
-    Field.create(:name => "#{entity.id}", :null_value => rand(2)==1, :default => "dev", :entity_id => entity.id, :type_arg1 =>"" ,:type_arg2 =>"",:datatype_id =>find(1,14))
-    Field.create(:name => "#{entity.id}", :null_value => rand(2)==1, :default => "dev", :entity_id => entity.id, :type_arg1 =>"arg1" ,:type_arg2 =>"",:datatype_id =>find(15,17))
-    Field.create(:name => "#{entity.id}", :null_value => rand(2)==1, :default => "dev", :entity_id => entity.id, :type_arg1 => "arg1",:type_arg2 =>"arg2",:datatype_id =>find(18,20))
+    #begin
+    a1= Field.create!(:name => "#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 =>"" ,:type_arg2 =>"",:datatype_id =>find(1,14))
+    counter+=1
+    # rescue => e
+    #   puts "ERROR: #{e.message}"
+    #   debugger
+    # end
+
+
+    # begin
+    b1=Field.create!(:name => "#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 =>"arg1" ,:type_arg2 =>"",:datatype_id =>find(15,17))
+    counter+=1
+    # rescue => e
+    #   puts "ERROR: #{e.message}"
+    #   debugger
+    # end
+
+
+    # begin
+    c1=Field.create!(:name => "#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 => "arg1",:type_arg2 =>"arg2",:datatype_id =>find(18,20))
+    counter+=1
+    #   rescue => e
+    #   puts "ERROR: #{e.message}"
+    #   debugger
+    # end
   end
 end

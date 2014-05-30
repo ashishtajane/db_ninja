@@ -2,7 +2,7 @@ class Field < ActiveRecord::Base
   has_one :datatype
   belongs_to :entity
   validates :name, presence: true
-  validates :null_value , presence: true
+  validates :null_value , :inclusion => {:in => [true, false]}
   validate :type_check
   validates :entity_id, presence: true
   validates :entity_id, uniqueness: { scope: :name,message: "Already Present" }

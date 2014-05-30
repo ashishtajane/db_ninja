@@ -34,12 +34,8 @@
 
     <div id="coll" class="tab-pane fade in active">
       <h3>Collaborators</h3>
-		  <div class = "row">
-        <%@collaborators.each do%>
-          <% |user| %>
-          <div class="span8"><%= user.name %></div>
-        <%end%>
-		  </div>            
+      <%#debugger%>
+      <%= render partial: 'shared/display_users' , locals: {users: @collaborators}%>
     </div>
       
     <div id="table" class="tab-pane fade"></div>

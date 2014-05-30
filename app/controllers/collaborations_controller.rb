@@ -1,8 +1,9 @@
 class CollaborationsController < ApplicationController
-
+  before_action :get_instance_variables 
+  before_action :check_owner , only: [:create]
   def index
     #debugger
-    @collaborators=Project.find_by(params[:project_id].to_i).collaborating_users
+    @collaborators=Project.find_by(params[:project_id].to_i).collaborating_users.paginate(page: params[:page])
   end
 
   def new
@@ -14,9 +15,17 @@ class CollaborationsController < ApplicationController
     
     if @collaboration.save
       Collaboration.create(:project_id => params[:pid].to_i , :user_id => @user.id)
-      flash[:success]  = "project Added"
+      flash[:success]  = "Collaborator Added to the project"
     end
-    redirect_to Project.find(params[:pid].to_i)
+      flash[:error]  = "Collaborator already exists"
+      redirect_to Project.find(params[:pid].to_i)
   end
+
+  private
+
+    def get_instance_variables
+      @project = Project.find(params[:project_id])
+      @owner = @project.user
+    end
 
 end

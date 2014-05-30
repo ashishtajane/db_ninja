@@ -1,31 +1,50 @@
-<h1> Project Listing </h1>
 <% owned_projects = current_user.projects %>
 <% collaborating_projects = current_user.collaborating_projects %>
-<div class="row" >
-  <% owned_projects.each do %> 
-    <% |own| %>
-    <aside class="span4">
-      <%= own.name %>
-    </aside>
-    <div class="span5">
-      <%= own.description %>
-      <%= link_to "view" , own ,method: :get  %>
-      <%= link_to "delete" , own ,method: :delete,data: { confirm: "You sure?"}   %>
-    </div>  
-  <%end%>
+<% if owned_projects.any? %>
+  <h1> Owned Projects </h1>
+  <table class="table table-striped">
 
-  <% collaborating_projects.each do %> 
-    <% |own| %>
-    <% unless collaborating_projects.include? own %>
-      <aside class="span4">
-        <%= own.name %>
-      </aside>
-      <div class="span5">
-        <%= own.description %>
-        <%= link_to "view" , own ,method: :get  %>
-      </div>
-    <%end%>
-  <%end%>
+    <thead>  
+      <tr>  
+        <th>Name</th>  
+        <th>Description</th>  
+        <th>View</th>  
+        <th> Drop </th>
+      </tr>  
+    </thead> 
 
+    <tbody>  
+      <% owned_projects.each do |own|%> 
+        <tr>  
+          <%= render partial: 'shared/home_table' , locals: {own: own, yes: "1"}%>
+        </tr>
+      <%end%>
+    </tbody> 
+  </table> 
+<%end%>
 
-</div>
+<% if collaborating_projects.length > owned_projects.length %>
+
+  <h1> 
+    Collaborating Projects 
+  </h1>
+  <table class="table table-striped">
+    <thead>  
+      <tr>  
+        <th>Name</th>  
+        <th>Description</th>  
+        <th>View</th>  
+      </tr>  
+    </thead> 
+
+    <tbody>  
+      <% collaborating_projects.each do |collaborator|%> 
+        <% unless owned_projects.include? collaborator %>
+          <tr>
+            <%= render partial: 'shared/home_table' , locals: {own: collaborator,yes: "0"}%>
+          </tr>
+        <%end%>
+      <%end%>      
+    </tbody> 
+  </table> 
+<%end%>

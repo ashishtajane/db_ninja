@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
     def check_owner
       unless current_user==@owner
         flash[:error] = "You are not the owner for this project"
-        debugger
+        #debugger
         redirect_to project_path(@project)
       end
     end

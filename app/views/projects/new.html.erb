@@ -1,33 +1,45 @@
-<h1>Add a New Project</h1>
-
 <div class="row">
-  <div class="span2 ">
+  <div class="span10 offset1">
+    <h1>Add a New Project</h1>
+  </div>
+</div>  
+<div class="row">
+  <div class="span10 offset1">
     <%= form_for(@project) do |f| %>
 
-      <%= render 'shared/error_messages', object: f.object %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <div class="form-group">
 
       <%= f.label :project_name %>
-      <%= f.text_field :name %>
+      <%= f.text_field :name, class: "form-control"  %>
 
+    </div>
+    <div class="form-group">
       <%= f.label :project_description %>
-      <%= f.text_field :description %>
-
+      <%= f.text_field :description , class: "form-control" %>
+    </div>
+    <div class="form-group">
       <%= f.label :host_ip %>
-      <%= f.text_field :host %>
-
+      <%= f.text_field :host, class: "form-control" %>
+    </div>
+    <div class="form-group">
       <%= f.label :adapter_used_for_your_application %>
-      <%= f.text_field :adapter %>
-
+      <%= f.text_field :adapter, class: "form-control" %>
+    </div>
+    <div class="form-group">
       <%= f.label :database_username %>
-      <%= f.text_field :dbusername %>
-
+      <%= f.text_field :dbusername, class: "form-control" %>
+    </div>
+    <div class="form-group">
       <%= f.label :database_name %>
-      <%= f.text_field :dbname %>
+      <%= f.text_field :dbname, class: "form-control" %>
 
+    </div>
+    <div class="form-group">
       <%= f.label :database_password %>
-      <%= f.password_field :dbpassword %>
-
-      <%= f.submit "Create my project", class: "btn btn-large btn-primary" %>
+      <%= f.password_field :dbpassword, class: "form-control"  %>
+    </div>
+    <%= f.submit "Create my project", class: "btn btn-large btn-primary" %>
     <% end %>
   </div>
 </div>

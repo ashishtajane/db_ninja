@@ -4,15 +4,15 @@
 
 	<ul class="nav nav-tabs">
     <li>
-      <%= link_to("Project Information",  Project.find(params[:project_id].to_i)  , data: {toggle: ""} ) %>
+      <%= link_to("Project Information",  @project  , data: {toggle: ""} ) %>
     </li>
 
     <li >
-      <%= link_to("Collaborators",  project_collaborations_path(Project.find(params[:project_id].to_i))  , data: {toggle: ""} ) %>
+      <%= link_to("Collaborators",  project_collaborations_path(@project)  , data: {toggle: ""} ) %>
     </li>
 
     <li class="active">
-      <a data-toggle="tab" href="#table">Tables</a>
+      <%= link_to("Table",  project_entities_path(@project)  , data: {toggle: ""} ) %>
     </li>
 
     <%project=Project.find(params[:project_id].to_i)%>
@@ -32,33 +32,7 @@
   <div class="tab-content">
 
     <div id="table" class="tab-pane fade in active">
-      <div class="row">
-        <div class="span4">
-          <h3>Model Name </h3>
-        </div>
-        <div class="span4">
-          <h3> Table Name </h3>
-        </div>
-      </div>
-
-      <%if @entities.any? %>
-        <div class="row">
-          <%@entities.each do %>
-            <% |ent| %>
-            <div class="span4">
-              <%=ent.model_name%>
-            </div>
-            <div class="span4">
-              <%=ent.table_name%>
-            </div>
-          <%end%>
-        </div>
-      <%else%>
-        Currently no tables are there.
-      <%end%>
-      <div style = "padding: 20px 0 0 0">
-        <%=link_to "Add Tables",new_project_entity_path %>
-      </div>
+      <%= render partial: 'shared/index_entities' %>
     </div>
   </div>
 	

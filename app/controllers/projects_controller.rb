@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 
-  before_action :get_instance_variables ,only: [:show , :update , :edit]
+  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy]
   before_action :check_collaborator,only: [:show , :update , :edit]
   #before_action :owner_of_the_project, only: [:show]
 
@@ -30,7 +30,10 @@ class ProjectsController < ApplicationController
   def edit
   end
 
-  
+  def destroy
+    @project.destroy
+    redirect_to root_url
+  end
 
   private
 
