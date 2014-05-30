@@ -1,6 +1,6 @@
 class EntitiesController < ApplicationController
 
-  before_action :get_instance_variables ,only: [:new,:index,:show,:update,:edit,:destroy]
+  before_action :get_instance_variables ,only: [:new,:index,:show,:update,:edit,:destroy,:create]
   before_action :get_entity , only: [:show,:update,:edit]
   before_action :check_collaborator,only: [:index,:show,:update,:edit]
   before_action :check_owner , only: [:new]
@@ -11,18 +11,19 @@ class EntitiesController < ApplicationController
   end
 
   def new
-    @entity = Entity.new()
+    #@entity = Entity.new()
   end
 
   def create
     @entity = Entity.new(:project_id => params[:project_id].to_i , :model_name => params[:model_name] ,:table_name => params[:table_name])
     if @entity.save 
-      Entity.create(:project_id => params[:project_id].to_i , :model_name => params[:model_name] ,:table_name => params[:table_name])
       flash[:success]="New Entity Added"
+      redirect_to new_project_entity_path(@project)
     else
-      flash[:error]="Already existing entity"
+      @errors = @entity.errors.full_messages
+      render 'new'
     end
-    redirect_to project_entities_path(Project.find(params[:project_id]))
+    
   end
 
   def show

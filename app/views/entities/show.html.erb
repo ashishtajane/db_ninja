@@ -1,4 +1,6 @@
-<%=link_to "Add Column", new_project_entity_field_path(@entity.project,@entity) ,method: "get"%>
+<% if current_user == @owner %>
+  <%=link_to "Add Column", new_project_entity_field_path(@entity.project,@entity) ,method: "get"%>
+<%end%>
 <table class="table table-striped">
   <thead>  
     <tr>  
@@ -28,7 +30,7 @@
           <td><%=field.null_value%></td>
           <td><%=field.default%></td>  
           <% if current_user == @owner %>
-            <td> <%=link_to "delete", project_entity_field_path(@project,@entity,field) ,method: "delete"%></td>
+            <td> <%=link_to "delete", project_entity_field_path(@project,@entity,field) ,method: "delete",data: { confirm: "Are you sure for deleting this field"}%></td>
           <%end%>
         </tr>
     <%end%>  

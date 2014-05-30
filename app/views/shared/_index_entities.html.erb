@@ -20,5 +20,7 @@
 <%end%>
 
 <div style = "padding: 20px 0 0 0">
-  <%=link_to "Add Tables",new_project_entity_path %>
+  <% if current_user == @owner %>
+    <%=link_to "Add Tables",new_project_entity_path %>
+  <%end%>
 </div>  

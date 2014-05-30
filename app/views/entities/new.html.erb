@@ -2,9 +2,13 @@
 
 <div class="row">
   <div class="span2 ">
-    <%= form_tag(project_entities_path(Project.find(params[:project_id])), method: "post") do%>
+    <%= form_tag(project_entities_path(@project), method: "post") do%>
+      <%=render partial:'shared/display_error_messages.html.erb' ,locals: {str: "Model name"} %>
       Model Name <%= text_field_tag(:model_name) %>
+
+      <%=render partial:'shared/display_error_messages.html.erb' ,locals: {str: "Table name"} %>
       Table Name <%= text_field_tag(:table_name) %>
+
       <%= submit_tag("Add") %>
     <% end %>
   </div>

@@ -116,6 +116,8 @@ GEM
       activesupport (>= 3.0)
       choice (~> 0.1.6)
       ruby-graphviz (~> 1.0.4)
+    rails4_client_side_validations (0.0.4)
+      rails (>= 4.0)
     rails_12factor (0.0.2)
       rails_serve_static_assets
       rails_stdout_logging
@@ -209,6 +211,7 @@ DEPENDENCIES
   railroady
   rails (= 4.0.4)
   rails-erd
+  rails4_client_side_validations (~> 0.0.4)
   rails_12factor (= 0.0.2)
   rails_autolink
   rspec-rails (= 2.13.1)
