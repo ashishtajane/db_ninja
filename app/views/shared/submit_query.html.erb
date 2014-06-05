@@ -1,0 +1,21 @@
+<%= form_tag( report_query_project_path(@project) , method: "post") do %>
+  
+  <div class="form-group functions">
+    <%= label_tag "Choose the functions"  %>
+    <%= select_tag  "function" ,  options_for_select( [["count","1"],["max","2"],["min","3"]]) %>
+  </div>
+
+  <div class="Entities" id="entity_1">
+    <%= select_tag  "entity_name_1" ,  options_for_select( @project.entities.collect{ |d| [ d.model_name , d.model_name , {data: { arg: d.id}}] } ) %>
+    <button class="add_entity" type="button" >Plus</button>
+    <div class="span10 offset1">
+      <div class="Properties" id="property_1_1">
+        <%= select_tag  "property_name_1_1" ,  options_for_select( @project.entities.first.fields.collect{ |d| [ d.name , d.name , {data: { arg: d.id}}] }.insert(0,"") ),:class => "property_dropdown" %>
+        <input type="text"></input>
+        <button class="add_property" type="button" disabled="disabled">Plus</button>
+      </div>
+    </div>
+  </div>
+
+  <%= submit_tag("Submit" , class: "btn btn-primary btn-medium") %>
+<% end %>

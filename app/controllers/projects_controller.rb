@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 
-  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy]
+  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query]
   before_action :check_collaborator,only: [:show , :update , :edit]
   #before_action :owner_of_the_project, only: [:show]
 
@@ -33,6 +33,14 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
     redirect_to root_url
+  end
+
+  def submit_query
+    render 'shared/submit_query'
+  end
+
+  def report_query
+    debugger
   end
 
   private

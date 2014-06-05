@@ -26,7 +26,7 @@
         <%= label_tag "Select the datatype"%>
         <%#collection_select(:type, :name, Datatype.find(:all), :name,:name,{},{ name: "type_name" })%>
 
-        <%= select_tag  "type_name" ,  options_for_select( Datatype.find(:all).collect{ |d| [ d.name , d.name , {data: { arg: d.arg}}]}) %>
+        <%= select_tag  "type_name" ,  options_for_select( Datatype.find(:all).collect{ |d| [ d.name , d.name , {data: { arg: d.arg}}] } ) %>
 
       </div>
 

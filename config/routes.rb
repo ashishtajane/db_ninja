@@ -7,6 +7,10 @@ DbNinja::Application.routes.draw do
   root to: 'users#home'
 
   resources :projects do
+    member do
+      get :submit_query 
+      post :report_query
+    end
     resources :collaborations
     resources :entities do
       resources :fields
