@@ -46,6 +46,8 @@ class ProjectsController < ApplicationController
   def query_div
     @entity = @project.entities.find(params["entity_selected"].to_i)
     @fields = @entity.fields
+    @counter = params["counter_value"]
+    #debugger
     respond_to do |format|
       format.js {}
     end

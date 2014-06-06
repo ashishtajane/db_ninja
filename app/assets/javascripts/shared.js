@@ -88,10 +88,11 @@ ready = function(){
   $(".add_property").on("click",plus_function);
 
   var test_function = function( ){
+    //console.log($(this).attr("name").split('_')[2]);
     $.ajax({
         url: "/projects/"+ $("#query_form").data("id") + "/query_div",
         type: "POST",
-        data: { "entity_selected": $(this).find(":selected").data("arg")},
+        data: { "entity_selected": $(this).find(":selected").data("arg") , "counter_value": $(this).attr("name").split('_')[2]},
         success: function (data) { 
             // append data to your page
            // console.log(data);
@@ -112,6 +113,8 @@ ready = function(){
 
   $(".property_dropdown").on("click", enable_function);
   $("#model_select").on("change" , test_function);
+
+  
   //.change(enable_function);
 
   /*
