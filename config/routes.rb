@@ -2,7 +2,6 @@ DbNinja::Application.routes.draw do
   devise_for :users
   get "users/home"
   get "users/list"
-
   
   root to: 'users#home'
 
@@ -10,6 +9,7 @@ DbNinja::Application.routes.draw do
     member do
       get :submit_query 
       post :report_query
+      post :query_div
     end
     resources :collaborations
     resources :entities do

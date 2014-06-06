@@ -87,7 +87,31 @@ ready = function(){
 
   $(".add_property").on("click",plus_function);
 
- $(".property_dropdown").on("change", enable_function);
+  var test_function = function( ){
+    $.ajax({
+        url: "/projects/"+ $("#query_form").data("id") + "/query_div",
+        type: "POST",
+        data: { "entity_selected": $(this).find(":selected").data("arg")},
+        success: function (data) { 
+            // append data to your page
+           // console.log(data);
+            //alert(data);
+            $(".add_property").on("click", plus_function);
+            $(".remove_property").on("click", remove_function);
+            $(".property_dropdown").on("change",enable_function);
+          },
+           error: function (data , textStatus) { 
+            // append data to your page
+                      alert("error");
+
+            console.log(textStatus);
+          }
+    });
+
+  }
+
+  $(".property_dropdown").on("click", enable_function);
+  $("#model_select").on("change" , test_function);
   //.change(enable_function);
 
   /*

@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 
-  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query]
+  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query, :query_div]
   before_action :check_collaborator,only: [:show , :update , :edit]
   #before_action :owner_of_the_project, only: [:show]
 
@@ -41,6 +41,14 @@ class ProjectsController < ApplicationController
 
   def report_query
     debugger
+  end
+
+  def query_div
+    @entity = @project.entities.find(params["entity_selected"].to_i)
+    @fields = @entity.fields
+    respond_to do |format|
+      format.js {}
+    end
   end
 
   private

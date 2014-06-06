@@ -1,0 +1,5 @@
+<div class="Properties" id="property_1_1">
+  <%= select_tag  "property_name_1_1" ,  options_for_select( field.collect{ |d| [ d.name , d.name , {data: { arg: d.id}}] }.insert(0,"") ),:class => "property_dropdown" %>
+  <input type="text"></input>
+  <button class="add_property" type="button" disabled="disabled">Plus</button>
+</div>
