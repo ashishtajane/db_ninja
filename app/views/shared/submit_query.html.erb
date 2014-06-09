@@ -6,10 +6,10 @@
   </div>
 
   <div class="Entities" id="entity_1">
-    <%= select_tag  "entity_name_1" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.model_name , {data: { arg: d.id}}] } ) , id: "model_select" %>
-    <button class="add_entity" type="button" >Plus</button>
-    <%=  tag("div", class:"span10 offset1 entity_above" , id: "entity_above_1" ,data: {id: @project.id}) %>
-      <%=render partial:'shared/query_select_fields' ,locals: {field: @project.entities.first.fields,counter: "1"}%>
+    <%= select_tag  "entity_name_1" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.model_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "model_select" %>
+    <button class="add_entity" type="button" disabled="disabled" >Plus</button>
+    <%=  tag("div", class:"span10 offset1 entity_above" , id: "entity_above_1" ) %>
+      <%#=render partial:'shared/query_select_fields' ,locals: {field: @project.entities.first.fields,counter: "1"}%>
     </div>
   </div>
 

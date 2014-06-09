@@ -44,12 +44,23 @@ ready = function(){
   hideshow($('#type_name').children(":selected").attr('data-arg'));
 
  
-  var remove_function = function(){
+  var remove_field_function = function(){
+    console.log('Remove Field Function')
     $(this).parent().remove();
-    $(".remove_property").on("click", remove_function); 
+    console.log('Exiting Remove Function')
+    bind_functions();
+  }
+
+  var remove_entity_function = function(){
+    console.log('Remove Entity Function');
+    $(this).parent().remove();
+    console.log('Exiting Remove Function')
+    bind_functions();
   }
 
   var plus_function = function(){
+    //alert("Heel")
+    console.log("plus_function")
     var curr= $(this);
     $(this).attr("disabled",true);
     var to_add=$(this).parent().clone();
@@ -64,13 +75,12 @@ ready = function(){
     //curr.text('Remove');
     $(this).parent().append('<button type="button" class="remove_property">Remove</button>')
     curr.remove();
-    $(".add_property").on("click", plus_function);
-    $(".remove_property").on("click", remove_function);
-    $(".property_dropdown").on("change",enable_function);
+    console.log("exiting plus_function")
+    bind_functions();
   }
 
   var enable_function = function(evt){
-    //console.log($(this).val()) ;
+    console.log("Enable Function") ;
     if($(this).parent().children('button:eq(0)').attr('class')=="add_property"){
       if($(this).val()!==""){
         //console.log($(this).parent().children('button:eq(0)').text())
@@ -82,39 +92,82 @@ ready = function(){
         $(this).parent().children('button:eq(0)').attr("disabled",true);
       }
     }
+    console.log("Exiting Enable Function") ;
+    bind_functions();
     //$(".property_dropdown").change(enable_function());    
   };
 
-  $(".add_property").on("click",plus_function);
 
-  var test_function = function( ){
+  
+
+  var add_entity_function  = function(){
+    console.log("Add Entity Function");
+    var add = $(this).parent().clone();
+    add.find('.Properties').remove();
+    add.attr('id',string_manipulation(1,add.attr('id')));
+    var sel_option= add.find('.model_select');
+    sel_option.attr('name',string_manipulation(2,sel_option.attr('name')));
+    sel_option.attr('id',string_manipulation(2,sel_option.attr('id')));
+    add.find('.add_entity').attr("disabled",true);
+    var div_option=add.find('.entity_above');
+    div_option.attr('id',string_manipulation(2,div_option.attr('id')));
+    $(this).parent().after(add);
+    $(this).parent().find('.model_select').after('<button type="button" class="remove_entity">Remove</button>');
+    $(this).remove();
+    console.log("Exiting Entity Function");
+    bind_functions();  
+  }
+
+  var select_model_change_field_function = function( ){
+    console.log("Model Change Function");
     //console.log($(this).attr("name").split('_')[2]);
-    $.ajax({
+    if($(this).find(":selected").val()==""){
+      $(this).parent().find('.entity_above').hide();
+      $(this).parent().find('.add_entity').attr("disabled",true);
+      //write the binding function
+    }
+    else{
+      $(this).parent().find('.add_entity').removeAttr('disabled');
+      var that = this;
+      $.ajax({
         url: "/projects/"+ $("#query_form").data("id") + "/query_div",
         type: "POST",
         data: { "entity_selected": $(this).find(":selected").data("arg") , "counter_value": $(this).attr("name").split('_')[2]},
         success: function (data) { 
-            // append data to your page
-           // console.log(data);
-            //alert(data);
-            $(".add_property").on("click", plus_function);
-            $(".remove_property").on("click", remove_function);
-            $(".property_dropdown").on("change",enable_function);
+            $(that).parent().find('.entity_above').show();
+            bind_functions();
           },
-           error: function (data , textStatus) { 
-            // append data to your page
-                      alert("error");
-
-            console.log(textStatus);
-          }
-    });
-
+        error: function (data ) { 
+          alert("error");
+        }
+      });
+    }
+    console.log("Exiting Model select Function");
+    bind_functions();
   }
 
-  $(".property_dropdown").on("click", enable_function);
-  $("#model_select").on("change" , test_function);
 
-  
+  var bind_functions = function(){
+
+    $(".add_property").off("click").on("click", plus_function);;
+    $(".remove_property").off("click").on("click", remove_field_function);
+    $(".property_dropdown").off("change").on("change",enable_function);
+    $(".model_select").off("change").on("change" , select_model_change_field_function);
+    $(".add_entity").off("click").on("click",add_entity_function);
+    $(".remove_entity").off("click").on("click",remove_entity_function);
+
+    //$(".add_property").on("click", plus_function);
+    //$(".remove_property").on("click", remove_function);
+    //$(".property_dropdown").on("change",enable_function);
+    //$("#model_select").on("change" , select_model_change_field_function);
+    //$(".add_entity").on("click",add_entity_function)
+  }
+
+
+
+  bind_functions();
+
+
   //.change(enable_function);
 
   /*
