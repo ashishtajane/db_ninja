@@ -11,11 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529053227) do
+ActiveRecord::Schema.define(version: 20140610053845) do
+
+  create_table "arguments", force: true do |t|
+    t.string   "name"
+    t.integer  "type"
+    t.integer  "constraint_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "collaborations", force: true do |t|
     t.integer  "user_id"
     t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "constraints", force: true do |t|
+    t.string   "sql_syntax"
+    t.string   "display_content"
+    t.integer  "function_type"
+    t.integer  "function_return_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -45,6 +62,12 @@ ActiveRecord::Schema.define(version: 20140529053227) do
     t.string   "type_arg1"
     t.string   "type_arg2"
     t.integer  "datatype_id"
+  end
+
+  create_table "function_return_types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "projects", force: true do |t|

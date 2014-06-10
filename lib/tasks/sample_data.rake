@@ -7,6 +7,7 @@ namespace :db do
     add_collaborators
     add_entity
     add_fields_to_entity
+    add_function_return_types
   end
 end
 
@@ -80,7 +81,7 @@ def add_fields_to_entity
   entities = Entity.all
   entities.each do |entity|
     #begin
-    a1= Field.create!(:name => "#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 =>"" ,:type_arg2 =>"",:datatype_id =>find(1,14))
+    a1= Field.create!(:name => "field#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 =>"" ,:type_arg2 =>"",:datatype_id =>find(1,14))
     counter+=1
     # rescue => e
     #   puts "ERROR: #{e.message}"
@@ -89,7 +90,7 @@ def add_fields_to_entity
 
 
     # begin
-    b1=Field.create!(:name => "#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 =>"arg1" ,:type_arg2 =>"",:datatype_id =>find(15,17))
+    b1=Field.create!(:name => "field#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 =>"arg1" ,:type_arg2 =>"",:datatype_id =>find(15,17))
     counter+=1
     # rescue => e
     #   puts "ERROR: #{e.message}"
@@ -98,11 +99,18 @@ def add_fields_to_entity
 
 
     # begin
-    c1=Field.create!(:name => "#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 => "arg1",:type_arg2 =>"arg2",:datatype_id =>find(18,20))
+    c1=Field.create!(:name => "field#{counter}", :null_value => (rand(2)==1), :default => "dev", :entity_id => entity.id, :type_arg1 => "arg1",:type_arg2 =>"arg2",:datatype_id =>find(18,20))
     counter+=1
     #   rescue => e
     #   puts "ERROR: #{e.message}"
     #   debugger
     # end
+  end
+end
+
+def add_function_return_types
+  array=["boolean","integer","string","date"]
+  array.each do |a|
+    FunctionReturnType.create!(:name => a)
   end
 end
