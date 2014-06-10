@@ -1,0 +1,47 @@
+<div class="span10 offset1">
+  <h1>
+    Add a new constraint
+  </h1>
+</div>
+<div class="row">
+  <div class="span10 offset1">
+    <%= form_tag(constraints_path , method: "post") do %>
+      <div class="form-group">
+         <%= label_tag "Display Content"%>
+
+         <%= text_field_tag(:display_content) %> 
+      </div>
+
+      <div class="form-group">
+        <%= label_tag "Is it a general function"%>
+        <%= select_tag( :function_type, options_for_select( [["Yes", "1"],["No","0"]] ) ) %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag "Sql Function name"%>
+        <%= text_field_tag(:sql_function_name) %> 
+      </div>
+
+      <div class="form-group">
+        <%= label_tag "Function Return type"  %>
+        <%= select_tag( :function_return_type, options_for_select( FunctionReturnType.find(:all).collect{ |d| [ d.name , d.name , {data: { arg: d.id}}] } )) %>
+      </div>
+
+      <div class="Arguments" >
+
+        <div id = "argument_type_0" class="argument" style="display: none;">
+          <%= label_tag "Argument Name"  %>
+          <%= text_field_tag 'arg_name_0', nil ,class: 'arg_name' ,id: nil%> 
+
+          <%= label_tag "Argument type"  %>
+          <%= select_tag( :argument_type, options_for_select( FunctionReturnType.find(:all).collect{ |d| [ d.name , d.name , {data: { arg: d.id}}] } ),name: :argument_type_0 , class: 'arg_select') %>
+        </div>
+
+        <button class="add_arguments" type="button">Add Argument</button>
+      </div>
+      
+      <%= submit_tag("Add" , class: "btn btn-primary btn-medium") %>
+
+    <% end %>
+  </div>
+</div>

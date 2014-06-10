@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20140610053845) do
     t.string   "sql_syntax"
     t.string   "display_content"
     t.integer  "function_type"
-    t.integer  "function_return_type"
+    t.integer  "function_return_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

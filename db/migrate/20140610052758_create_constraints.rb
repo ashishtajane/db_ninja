@@ -4,7 +4,7 @@ class CreateConstraints < ActiveRecord::Migration
       t.string :sql_syntax
       t.string :display_content
       t.integer :function_type
-      t.integer :function_return_type
+      t.integer :function_return_type_id
 
       t.timestamps
     end

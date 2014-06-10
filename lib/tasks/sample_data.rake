@@ -8,6 +8,7 @@ namespace :db do
     add_entity
     add_fields_to_entity
     add_function_return_types
+    add_constraints
   end
 end
 
@@ -113,4 +114,23 @@ def add_function_return_types
   array.each do |a|
     FunctionReturnType.create!(:name => a)
   end
+end
+
+def add_constraints
+  c=Constraint.create(display_content: "Enter Regular Expression", function_type: 0,sql_syntax: "REGEXP",function_return_type_id: FunctionReturnType.find_by_name("boolean").id)
+  c=Constraint.create(display_content: "is less than", function_type: 0,sql_syntax: "<",function_return_type_id: FunctionReturnType.find_by_name("boolean").id)
+  c=Constraint.create(display_content: "is less than or equal to", function_type: 0,sql_syntax: "<=",function_return_type_id: FunctionReturnType.find_by_name("boolean").id)
+  c=Constraint.create(display_content: "is greater than", function_type: 0,sql_syntax: ">",function_return_type_id: FunctionReturnType.find_by_name("boolean").id)
+  c=Constraint.create(display_content: "is greater than or equal to", function_type: 0,sql_syntax: ">=",function_return_type_id: FunctionReturnType.find_by_name("boolean").id)
+  c=Constraint.create(display_content: "is equal to", function_type: 0,sql_syntax: "=",function_return_type_id: FunctionReturnType.find_by_name("boolean").id)
+  c=Constraint.create(display_content: "is not equal to", function_type: 0,sql_syntax: "!=",function_return_type_id: FunctionReturnType.find_by_name("boolean").id)
+
+  c=Constraint.create(display_content: "get length", function_type: 1,sql_syntax: "length",function_return_type_id: FunctionReturnType.find_by_name("integer").id)
+  c=Constraint.create(display_content: "trim begining and end spaces", function_type: 1,sql_syntax: "ltrim",function_return_type_id: FunctionReturnType.find_by_name("string").id)
+
+  c=Constraint.create(display_content: "get right x characters", function_type: 1,sql_syntax: "RIGHT",function_return_type_id: FunctionReturnType.find_by_name("string").id)
+  Argument.create!(:name => "length x",:type => FunctionReturnType.find_by_name("integer").id , :constraint_id =>c.id)
+
+  
+
 end

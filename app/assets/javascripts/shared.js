@@ -146,6 +146,22 @@ ready = function(){
     bind_functions();
   }
 
+  var add_argument_function = function(){
+
+    var add = $(this).parent().find('.argument').last().clone()
+    //console.log(add.attr('id'));
+    add.attr('id',string_manipulation(2,add.attr('id')));
+    var name = add.find('.arg_name');
+    name.attr('name',string_manipulation(2,name.attr('name')))
+
+    //console.log(name.attr('name'))
+
+    var select = add.find('.arg_select');
+    select.attr('name',string_manipulation(2,select.attr('name')))
+    add.show()
+    $(".add_arguments").before(add);
+    bind_functions();
+  }
 
   var bind_functions = function(){
 
@@ -155,6 +171,7 @@ ready = function(){
     $(".model_select").off("change").on("change" , select_model_change_field_function);
     $(".add_entity").off("click").on("click",add_entity_function);
     $(".remove_entity").off("click").on("click",remove_entity_function);
+    $(".add_arguments").off("click").on("click",add_argument_function);
 
     //$(".add_property").on("click", plus_function);
     //$(".remove_property").on("click", remove_function);

@@ -5,6 +5,8 @@ DbNinja::Application.routes.draw do
   
   root to: 'users#home'
 
+  resources :constraints
+
   resources :projects do
     member do
       get :submit_query 
