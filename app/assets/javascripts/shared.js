@@ -29,6 +29,7 @@ function string_manipulation(p,s)
 
 ready = function(){
 
+
   $("#type_name").bind('click', function() {
     //alert($('#type_name').children(":selected").attr('value'));    
     //alert($(this).attr('data-arg'))
@@ -73,7 +74,10 @@ ready = function(){
     $(this).parent().after(to_add);
     //curr.attr("class","remove_property"); 
     //curr.text('Remove');
-    $(this).parent().append('<button type="button" class="remove_property">Remove</button>')
+    //$(this).parent().append('<button type="button" class="remove_property">Remove</button>')
+
+    $(this).parent().find('.Constraints').before('<button type="button" class="remove_property">Remove</button>')
+    //$('<button type="button" class="remove_property">Remove</button>').insertBefore();
     curr.remove();
     console.log("exiting plus_function")
     bind_functions();
@@ -93,8 +97,60 @@ ready = function(){
       }
     }
     console.log("Exiting Enable Function") ;
+
+    //AJAX PART HERE
+    if($(this).val()==""){
+      console.log("Empty Selected")
+      $(this).parent().find('.field_above').remove();
+      // $(this).find('field_above')
+    }
+    else{
+      $.ajax({
+        url: "/projects/"+ $("#query_form").data("id") + "/constraints_load",
+        type: "POST",
+        data: { "field_selected": $(this).find(":selected").data("arg") , "entity_counter": $(this).attr("name").split('_')[2], "field_counter": $(this).attr("name").split('_')[3]},
+        success: function (data) { 
+            //alert("succes")
+            // $(that).parent().find('.entity_above').show();
+            bind_functions();
+          },
+        error: function (data ) { 
+          alert("error");
+        }
+      });
+      console.log("Non Empty Selected")
+    }
+
     bind_functions();
     //$(".property_dropdown").change(enable_function());    
+  };
+
+  var display_arguments_and_next_cons=function(){
+
+    $(this).nextAll().remove()
+    $(this).parent().nextAll().remove()
+
+    if($(this).val()==""){
+      console.log("Empty Selected")  
+      //$(this).parent().find('.field_above').remove();
+      // $(this).find('field_above')
+    }
+    else{
+      $.ajax({
+        url: "/projects/"+ $("#query_form").data("id") + "/arguments_load",
+        type: "POST",
+        data: { "constraint_selected": $(this).find(":selected").data("id") , "entity_counter": $(this).attr("name").split('_')[1], "field_counter": $(this).attr("name").split('_')[2],"constraint_counter": $(this).attr("name").split('_')[3],"return_value_above": $(this).find(":selected").data("retrurn-type")},
+        success: function (data) { 
+            //alert("succes")
+            // $(that).parent().find('.entity_above').show();
+            bind_functions();
+          },
+        error: function (data ) { 
+          alert("error");
+        }
+      });
+    }
+    bind_functions();
   };
 
 
@@ -172,7 +228,9 @@ ready = function(){
     $(".add_entity").off("click").on("click",add_entity_function);
     $(".remove_entity").off("click").on("click",remove_entity_function);
     $(".add_arguments").off("click").on("click",add_argument_function);
-
+    $(".field_above").off("change").on("change",display_arguments_and_next_cons);
+    $( ".Datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
+    // $(".property_dropdown_cons").off("change").on("change",change_constraints_function);
     //$(".add_property").on("click", plus_function);
     //$(".remove_property").on("click", remove_function);
     //$(".property_dropdown").on("change",enable_function);

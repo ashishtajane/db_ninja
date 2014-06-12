@@ -12,6 +12,8 @@ DbNinja::Application.routes.draw do
       get :submit_query 
       post :report_query
       post :query_div
+      post :constraints_load
+      post :arguments_load
     end
     resources :collaborations
     resources :entities do

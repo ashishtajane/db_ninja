@@ -1,5 +1,8 @@
 <%=content_tag :div ,class: "Properties" ,id: "property_#{counter}_1" do%> 
   <%= select_tag  "property_name_#{counter}_1" ,  options_for_select( field.collect{ |d| [ d.name , d.name , {data: { arg: d.id}}] }.insert(0,"") ),:class => "property_dropdown" %>
-  <input type="text"></input>
+  
   <button class="add_property" type="button" disabled="disabled">Plus</button>
+
+  <%=content_tag :div ,class: "Constraints span8 offset2" ,id: "constraints_#{counter}_1" do%> 
+  <%end%>
 <%end%>

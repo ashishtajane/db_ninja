@@ -16,6 +16,7 @@ gem 'rails-erd'
 gem 'mysql2'
 gem 'devise'
 gem 'protected_attributes'
+gem 'jquery-ui-sass-rails'
 
 gem 'rails4_client_side_validations', '~> 0.0.4'
 group :development, :test do

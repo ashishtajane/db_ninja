@@ -1,0 +1,18 @@
+<% unless @function.name == "boolean" %>
+  $('<%= "#constraint_"+@entity_counter.to_s+"_"+@field_counter.to_s+"_"+@constraint_counter.to_s%>').parent().after('<%= escape_javascript( render partial: "shared/constraint",locals: {function_id: @function.id,entity_counter: @entity_counter,field_counter: @field_counter,constraint_counter: @constraint_counter.to_i+1} )%>')
+<%end%>
+
+<%argument_counter = 0 %>
+
+<% if @constraint.function_type == -1 %>
+  <% argument_counter = argument_counter+ 1 %>
+  $('<%= "#constraint_"+@entity_counter.to_s+"_"+@field_counter.to_s+"_"+@constraint_counter.to_s%>').after('<%= escape_javascript( render partial: "shared/load_form",locals: {arg_name: "",arg_type: @return_type,entity_counter: @entity_counter,field_counter: @field_counter,constraint_counter: @constraint_counter,argument_counter: argument_counter} )%>')
+<%end%>
+
+
+<% @argument.each do |arg| %>
+  <% arg_type=FunctionReturnType.find(arg.type).name %>
+  <% argument_counter = argument_counter+ 1 %>
+  $('<%= "#constraint_"+@entity_counter.to_s+"_"+@field_counter.to_s+"_"+@constraint_counter.to_s%>').after('<%= escape_javascript( render partial: "shared/load_form",locals: {arg_name: arg.name,arg_type: arg_type,entity_counter: @entity_counter,field_counter: @field_counter,constraint_counter: @constraint_counter,argument_counter: argument_counter} )%>')
+<%end%>
+

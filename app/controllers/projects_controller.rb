@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 
-  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query, :query_div]
+  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query, :query_div,:constraints_load]
   before_action :check_collaborator,only: [:show , :update , :edit]
   #before_action :owner_of_the_project, only: [:show]
 
@@ -50,6 +50,30 @@ class ProjectsController < ApplicationController
     #debugger
     respond_to do |format|
       format.js {}
+    end
+  end
+
+  def constraints_load
+    
+    @field = Field.find(params["field_selected"].to_i)
+    @entity_counter = params["entity_counter"]
+    @field_counter  = params["field_counter"]
+
+    respond_to do |format|
+      format.js {}
+    end
+  end
+
+  def arguments_load
+    @constraint = Constraint.find(params["constraint_selected"])
+    @function = FunctionReturnType.find(@constraint.function_return_type_id);
+    @argument = @constraint.arguments
+    @entity_counter = params["entity_counter"]
+    @field_counter = params["field_counter"]
+    @constraint_counter = params["constraint_counter"]
+    @return_type = params["return_value_above"]
+    respond_to do |format|
+      format.js{}
     end
   end
 

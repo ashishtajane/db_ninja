@@ -1,1 +1,2 @@
 to add infinite arguments constraint facility
+to add facility for generic input

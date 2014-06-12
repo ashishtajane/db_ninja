@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140610053845) do
+ActiveRecord::Schema.define(version: 20140611064730) do
 
   create_table "arguments", force: true do |t|
     t.string   "name"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20140610053845) do
     t.integer  "arg"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "function_return_type_id"
   end
 
   create_table "entities", force: true do |t|

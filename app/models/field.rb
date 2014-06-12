@@ -1,5 +1,5 @@
 class Field < ActiveRecord::Base
-  has_one :datatype
+  belongs_to :datatype
   belongs_to :entity
   validates :name, presence: true
   validates :null_value , :inclusion => {:in => [true, false]}
