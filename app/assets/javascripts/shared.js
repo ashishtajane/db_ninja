@@ -69,14 +69,17 @@ ready = function(){
 
     first_select_tag.attr("id",string_manipulation(3,first_select_tag.attr("id")));
     first_select_tag.attr("name",string_manipulation(3,first_select_tag.attr("name")));
-
+    var constraint_div = to_add.find('.Constraints') ; 
+    constraint_div.find('.check_blank').remove();
+    constraint_div.attr('id',string_manipulation(2,constraint_div.attr('id')))
     to_add.attr("id",string_manipulation(2,to_add.attr("id")));
     $(this).parent().after(to_add);
     //curr.attr("class","remove_property"); 
     //curr.text('Remove');
     //$(this).parent().append('<button type="button" class="remove_property">Remove</button>')
 
-    $(this).parent().find('.Constraints').before('<button type="button" class="remove_property">Remove</button>')
+    $(this).parent().find('.Constraints').before('<button type="button" class="remove_property">Remove</button>');
+    // alert("Plus Function")
     //$('<button type="button" class="remove_property">Remove</button>').insertBefore();
     curr.remove();
     console.log("exiting plus_function")
@@ -100,6 +103,8 @@ ready = function(){
 
     //AJAX PART HERE
     if($(this).val()==""){
+      alert("Enable Function")
+      $(this).parent().find('.Constraints').find('.check_blank').remove();
       console.log("Empty Selected")
       $(this).parent().find('.field_above').remove();
       // $(this).find('field_above')
@@ -188,7 +193,7 @@ ready = function(){
       $.ajax({
         url: "/projects/"+ $("#query_form").data("id") + "/query_div",
         type: "POST",
-        data: { "entity_selected": $(this).find(":selected").data("arg") , "counter_value": $(this).attr("name").split('_')[2]},
+        data: { "entity_selected": $(this).find(":selected").data("arg") , "entity_counter": $(this).attr("name").split('_')[2]},
         success: function (data) { 
             $(that).parent().find('.entity_above').show();
             bind_functions();
@@ -219,6 +224,31 @@ ready = function(){
     bind_functions();
   }
 
+  var show_fields_and_unhide_Entities = function(){
+
+    $(".Entities").show();
+    if($(this).val()==""){
+      $(".function_field").remove();
+      $(".Entities").hide();
+    }
+    else{
+      var that = this;
+      $.ajax({
+        url: "/projects/"+ $("#query_form").data("id") + "/load_function_field_div",
+        type: "POST",
+        data: { "entity_selected": $(this).find(":selected").data("arg") },
+        success: function (data) { 
+            bind_functions();
+          },
+        error: function (data ) { 
+          alert("error");
+        }
+      });
+    }
+    bind_functions();
+
+  }
+
   var bind_functions = function(){
 
     $(".add_property").off("click").on("click", plus_function);;
@@ -229,6 +259,7 @@ ready = function(){
     $(".remove_entity").off("click").on("click",remove_entity_function);
     $(".add_arguments").off("click").on("click",add_argument_function);
     $(".field_above").off("change").on("change",display_arguments_and_next_cons);
+    $(".Function_Model").off("change").on("change",show_fields_and_unhide_Entities)
     $( ".Datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
     // $(".property_dropdown_cons").off("change").on("change",change_constraints_function);
     //$(".add_property").on("click", plus_function);

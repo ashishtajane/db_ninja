@@ -1,6 +1,6 @@
 <% return_type = function_id %>
 
-<div class = "form-group">
+<div class = "form-group check_blank">
   <%= select_tag  "constraint_#{((entity_counter.to_s + "_") + field_counter.to_s) +"_"+constraint_counter.to_s}",   options_for_select( Constraint.where("function_type = ? OR  function_type= ?", -1, return_type).collect{ |d| [  d.display_content , d.id ,{data: { id: d.id , return_type: FunctionReturnType.find(return_type).name }}] }.insert(0,"") ) , class: "field_above" %>
 </div>
 

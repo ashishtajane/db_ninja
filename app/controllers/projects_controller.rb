@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 
-  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query, :query_div,:constraints_load]
+  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query, :query_div,:constraints_load,:load_function_field_div]
   before_action :check_collaborator,only: [:show , :update , :edit]
   #before_action :owner_of_the_project, only: [:show]
 
@@ -46,7 +46,8 @@ class ProjectsController < ApplicationController
   def query_div
     @entity = @project.entities.find(params["entity_selected"].to_i)
     @fields = @entity.fields
-    @counter = params["counter_value"]
+    @counter = params["entity_counter"]
+    # @field_counter = params["field_counter"]
     #debugger
     respond_to do |format|
       format.js {}
@@ -59,6 +60,14 @@ class ProjectsController < ApplicationController
     @entity_counter = params["entity_counter"]
     @field_counter  = params["field_counter"]
 
+    respond_to do |format|
+      format.js {}
+    end
+  end
+
+  def load_function_field_div 
+    @entity = @project.entities.find(params["entity_selected"].to_i)
+    @fields = @entity.fields
     respond_to do |format|
       format.js {}
     end

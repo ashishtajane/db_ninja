@@ -1,11 +1,17 @@
 <%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id},id: "query_form") do %>
   
   <div class="form-group functions">
-    <%= label_tag "Choose the functions"  %>
-    <%= select_tag  "function" ,  options_for_select( [["count","1"],["max","2"],["min","3"]]) %>
+    <%= label_tag "Choose the Function"  %>
+    <%= select_tag  "function" ,  options_for_select( [["Count","count"],["Maximum","max"],["Minimum","min"],["Average","avg"]]) %>
+
+    <div class= "Function_entity">
+      <%= label_tag "Choose the Entity on which function will work"  %>
+      <%= select_tag  "function_entity_1" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.model_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "Function_Model" %>
+    </div>
   </div>
 
-  <div class="Entities" id="entity_1">
+  <div class="Entities" id="entity_1" style = "display:none;">
+    <h3> Choose Grouping Parameters </h3>
     <%= select_tag  "entity_name_1" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.model_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "model_select" %>
     <button class="add_entity" type="button" disabled="disabled" >Plus</button>
     <%=  tag("div", class:"span10 offset1 entity_above" , id: "entity_above_1" ) %>
