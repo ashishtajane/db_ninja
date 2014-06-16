@@ -1,10 +1,11 @@
 class ProjectsController < ApplicationController
 
-  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query, :query_div,:constraints_load,:load_function_field_div]
+  before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query, :query_div,:constraints_load,:load_function_field_div,:report_query]
   before_action :check_collaborator,only: [:show , :update , :edit]
   #before_action :owner_of_the_project, only: [:show]
 
   def new
+    debugger
     @project = Project.new()
   end
 
@@ -36,11 +37,39 @@ class ProjectsController < ApplicationController
   end
 
   def submit_query
-    render 'shared/submit_query'
   end
 
   def report_query
-    debugger
+    param = params.sort_by {|x,y| x}
+    entity_map = get_entity_map(param)
+    field_map = get_field_map(param,entity_map)
+    group_map = get_groups(field_map)
+    constraints = get_constraints(group_map,param)
+    @value = {}
+    @where_clause = ""
+    @select_clause = params["function"] + "(" + params["function_entity"]+"."+params["function_field"]+")"
+    arr = entity_map.map { |x,y| y}.uniq
+    unless arr.include? params["function_entity"]
+      flash.now[:error] = "Model Name selected should occur in grouping"
+      render 'submit_query'
+    end
+    @from_clause = arr.join(",")
+    @group_clause = group_map.map { |x,y| x[0]+"."+x[1]}.uniq.join(",")
+    constraints.each do
+      |x,y|
+      z=""
+      y.each do
+        |s|
+        z = z+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+      end
+      @value[x] = z
+      if @where_clause!=""
+        @where_clause = @where_clause + "and" +z
+      else
+        @where_clause = @where_clause + z
+      end
+    end
+    @query_to_be_fired = "select " + @select_clause + " from " + @from_clause + " where " + @where_clause + " group by " + @group_clause
   end
 
   def query_div
@@ -88,15 +117,116 @@ class ProjectsController < ApplicationController
 
   private
 
-  def project_params
-    params.require(:project).permit(:name,:description, :host, :dbusername,:dbpassword,:adapter,:dbname)
-  end
-
-  private
+    def project_params
+      params.require(:project).permit(:name,:description, :host, :dbusername,:dbpassword,:adapter,:dbname)
+    end
 
     def get_instance_variables
       @project = Project.find(params[:id])
       @owner = @project.user
+    end
+
+    def get_constraint_string(variable,a,size)
+      if(size<0)
+        return variable
+      end
+      id = a[size][0].to_i
+      arguments = a[size][1]
+      cons = Constraint.find(id)
+      if (cons.function_type == -1)
+        return_string =  get_constraint_string(variable,a,size-1) + cons.sql_syntax + arguments[0]
+        return return_string
+      else
+        var=""
+        unless arguments == nil
+          arguments.each do
+            |arg|
+            var = var + "," + arg.to_s
+          end
+        end
+        return_string =  cons.sql_syntax + "(" +get_constraint_string(variable,a,size-1) + var + ")"
+        return return_string
+      end
+    end
+
+    def get_entity_map(params)
+      entity_map={}
+      params.each do
+        |x,y|
+        if x.include? "entity_name"
+          entity_map[x.split("_")[2]]=y
+        end
+      end
+      return entity_map
+    end
+
+    def get_field_map(param,entity_map)
+      field_map = {}
+      param.each do
+        |x,y|
+        if x.include? "property_name"
+          a=[]
+          x=x.split("_")
+          a.push (entity_map[x[2]])
+          x= x[2]+ "_" +x[3]
+          a.push(y)
+          field_map[x] = a
+        end
+      end
+      return field_map
+    end
+
+    def get_groups(field_map)
+      group_map = {}
+      field_map.each do
+                    |x,y|
+        if group_map.has_key?(y)
+          group_map[y].push(x)
+        else
+          group_map[y]= []
+          group_map[y].push(x)
+        end
+            end
+      return group_map
+    end
+
+    def get_constraints_from_a_b(param, s)
+      con = {}
+      arg = {}
+      arr = {}
+      param.each do
+        |x,y|
+        if x.include? ("constraint_"+s)
+          con [x.split("_")[3]] = y
+        end
+        if x.include? "argument_"+s
+          unless arg.has_key? x.split("_")[3]
+            arg[x.split("_")[3]]=[]
+          end
+          arg[x.split("_")[3]].push(y)
+        end
+      end
+      con.each do
+        |x,y|
+        arr[y] = arg[x]
+      end
+      return arr
+    end
+
+    def get_constraints(group_map,param)
+      constraints = {}
+      group_map.each do
+        |x,y|
+        unless constraints.has_key? x
+          constraints[x] = []
+        end
+        y.each do
+          |str|
+          constraints[x].push(get_constraints_from_a_b(param,str))
+          #puts str,constraints[x],str
+        end
+      end
+      return constraints
     end
 
   # def owner_of_the_project

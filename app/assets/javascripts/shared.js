@@ -227,8 +227,8 @@ ready = function(){
   var show_fields_and_unhide_Entities = function(){
 
     $(".Entities").show();
+    $(".function_field").remove();
     if($(this).val()==""){
-      $(".function_field").remove();
       $(".Entities").hide();
     }
     else{
