@@ -2,8 +2,7 @@ class CollaborationsController < ApplicationController
   before_action :get_instance_variables 
   before_action :check_owner , only: [:create]
   def index
-    #debugger
-    @collaborators=Project.find_by(params[:project_id].to_i).collaborating_users.paginate(page: params[:page])
+    @collaborators=Project.find(params[:project_id].to_i).collaborating_users.paginate(page: params[:page])
   end
 
   def new

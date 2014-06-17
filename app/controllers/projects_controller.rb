@@ -5,7 +5,6 @@ class ProjectsController < ApplicationController
   #before_action :owner_of_the_project, only: [:show]
 
   def new
-    debugger
     @project = Project.new()
   end
 
@@ -60,16 +59,24 @@ class ProjectsController < ApplicationController
       z=""
       y.each do
         |s|
-        z = z+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+        if( z== "")
+          z = z+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+        else
+          z = z+" and "+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+        end
       end
       @value[x] = z
-      if @where_clause!=""
-        @where_clause = @where_clause + "and" +z
-      else
+      if @where_clause == ""
         @where_clause = @where_clause + z
+      else
+        @where_clause = @where_clause + " and " +z
       end
     end
-    @query_to_be_fired = "select " + @select_clause + " from " + @from_clause + " where " + @where_clause + " group by " + @group_clause
+    if @where_clause ==""
+      @query_to_be_fired = "select " + @select_clause + " from " + @from_clause + " group by " + @group_clause
+    else
+      @query_to_be_fired = "select " + @select_clause + " from " + @from_clause + " where " + @where_clause + " group by " + @group_clause
+    end
   end
 
   def query_div
@@ -130,11 +137,14 @@ class ProjectsController < ApplicationController
       if(size<0)
         return variable
       end
+      if ( a[size][0] == "")
+        return ""
+      end
       id = a[size][0].to_i
       arguments = a[size][1]
       cons = Constraint.find(id)
       if (cons.function_type == -1)
-        return_string =  get_constraint_string(variable,a,size-1) + cons.sql_syntax + arguments[0]
+        return_string =  get_constraint_string(variable,a,size-1) + " " + cons.sql_syntax + " " + arguments[0]
         return return_string
       else
         var=""
@@ -164,6 +174,9 @@ class ProjectsController < ApplicationController
       field_map = {}
       param.each do
         |x,y|
+        if y==""
+          next
+        end
         if x.include? "property_name"
           a=[]
           x=x.split("_")
@@ -179,7 +192,7 @@ class ProjectsController < ApplicationController
     def get_groups(field_map)
       group_map = {}
       field_map.each do
-                    |x,y|
+        |x,y|
         if group_map.has_key?(y)
           group_map[y].push(x)
         else

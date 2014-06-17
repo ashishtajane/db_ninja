@@ -6,13 +6,13 @@
 
     <div class= "Function_entity">
       <%= label_tag "Choose the Entity on which function will work"  %>
-      <%= select_tag  "function_entity" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.model_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "Function_Model" %>
+      <%= select_tag  "function_entity" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.table_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "Function_Model" %>
     </div>
   </div>
 
   <h3 class="Entities" style = "display:none;"> Choose Grouping Parameters </h3>
   <div class="Entities" id="entity_1" style = "display:none;">
-    <%= select_tag  "entity_name_1" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.model_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "model_select" %>
+    <%= select_tag  "entity_name_1" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.table_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "model_select" %>
     <button class="add_entity" type="button" disabled="disabled" >Plus</button>
     <%=  tag("div", class:"span10 offset1 entity_above" , id: "entity_above_1" ) %>
       <%#=render partial:'shared/query_select_fields' ,locals: {field: @project.entities.first.fields,counter: "1"}%>
