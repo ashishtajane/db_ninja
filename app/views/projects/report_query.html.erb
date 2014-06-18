@@ -1,1 +1,7 @@
-<%= @query_to_be_fired %>
+<%#= %x[ mysql -D demodata -u root -pdev -e @query_to_be_fired ] %>
+<% query = @query_to_be_fired %>
+<% command = "mysql -D demodata -u root -pdev -e " + "\""+query+"\"" %>
+
+<%= value = `#{command}`%>
+
+<%debugger%>

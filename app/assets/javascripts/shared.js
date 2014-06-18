@@ -166,6 +166,8 @@ ready = function(){
     var add = $(this).parent().clone();
     add.find('.Properties').remove();
     add.attr('id',string_manipulation(1,add.attr('id')));
+    var parameter = add.find(".Selection") ;
+    parameter.attr('name',string_manipulation(1,parameter.attr('name')));
     var sel_option= add.find('.model_select');
     sel_option.attr('name',string_manipulation(2,sel_option.attr('name')));
     sel_option.attr('id',string_manipulation(2,sel_option.attr('id')));

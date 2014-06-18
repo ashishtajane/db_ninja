@@ -40,6 +40,16 @@ class ProjectsController < ApplicationController
 
   def report_query
     param = params.sort_by {|x,y| x}
+
+    separate_where =[]
+
+    param.each do
+      |x,y|
+      if x.include? "selection" and y =="where"
+        separate_where.push(x.split("_")[1])
+      end
+    end
+
     entity_map = get_entity_map(param)
     field_map = get_field_map(param,entity_map)
     group_map = get_groups(field_map)
@@ -53,7 +63,24 @@ class ProjectsController < ApplicationController
       render 'submit_query'
     end
     @from_clause = arr.join(",")
-    @group_clause = group_map.map { |x,y| x[0]+"."+x[1]}.uniq.join(",")
+
+    array_for_grouping = []
+    group_map.each { 
+      |x,y| 
+      flag=false
+      y.each do
+        |str|
+        unless separate_where.include? str.split("_")[0]
+          flag=true
+        end
+      end
+      if flag 
+        array_for_grouping.push(x[0]+"."+x[1])
+      end
+    }
+    
+    @group_clause = array_for_grouping.uniq.join(",")
+
     constraints.each do
       |x,y|
       z=""
@@ -72,10 +99,15 @@ class ProjectsController < ApplicationController
         @where_clause = @where_clause + " and " +z
       end
     end
-    if @where_clause ==""
-      @query_to_be_fired = "select " + @select_clause + " from " + @from_clause + " group by " + @group_clause
-    else
-      @query_to_be_fired = "select " + @select_clause + " from " + @from_clause + " where " + @where_clause + " group by " + @group_clause
+    if @group_clause != ""
+      @select_clause = @group_clause + "," + @select_clause
+    end
+    @query_to_be_fired = "select " + @select_clause + " from " + @from_clause 
+    if @where_clause != ""
+      @query_to_be_fired = @query_to_be_fired + " where " + @where_clause
+    end
+    if @group_clause != ""
+      @query_to_be_fired = @query_to_be_fired + " group by " + @group_clause
     end
   end
 
