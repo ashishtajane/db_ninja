@@ -1,0 +1,1 @@
+$('<%= "#entity_above_"+@counter.to_s%>').html('<%= escape_javascript( render partial: "shared/query_select_fields", locals: {field: @fields,counter: @counter,field_counter: @field_counter} )%>');  

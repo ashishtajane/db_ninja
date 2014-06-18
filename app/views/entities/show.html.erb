@@ -1,0 +1,38 @@
+<% if current_user == @owner %>
+  <%=link_to "Add Column", new_project_entity_field_path(@entity.project,@entity) ,method: "get"%>
+<%end%>
+<table class="table table-striped">
+  <thead>  
+    <tr>  
+      <th>Name</th>  
+      <th>Type</th>  
+      <th>NULL</th>  
+      <th>Default</th>  
+      <% if current_user == @owner %>
+        <th> Drop </th>
+      <%end%>
+    </tr>  
+  </thead>  
+  <tbody>  
+    <% @fields.each do |field|%>
+      <% name = Datatype.find(field.datatype_id).name %>
+        <tr>  
+          <td><%=field.name%></td>  
+
+          <% if !(field.type_arg1.empty?) && !(field.type_arg2.empty?) %>
+            <td><%= name.to_s + "(" + field.type_arg1.to_s + "," + field.type_arg2.to_s + ")" %></td>  
+          <% elsif  !(field.type_arg1.empty?) %>
+            <td><%= name.to_s + "(" + field.type_arg1.to_s + ")" %></td> 
+          <%else%>
+            <td><%=name.to_s%></td> 
+          <%end%>
+
+          <td><%=field.null_value%></td>
+          <td><%=field.default%></td>  
+          <% if current_user == @owner %>
+            <td> <%=link_to "delete", project_entity_field_path(@project,@entity,field) ,method: "delete",data: { confirm: "Are you sure for deleting this field"}%></td>
+          <%end%>
+        </tr>
+    <%end%>  
+  </tbody>  
+</table> 

@@ -1,0 +1,17 @@
+<tr>
+
+  <td>
+    <%=entity.model_name%>
+  </td>
+
+  <td>
+    <%=link_to  entity.table_name ,project_entity_path(@project,entity)%>
+  </td>
+
+  <% if current_user == @owner %>
+    <td>
+      <%= link_to "delete" , project_entity_path(@project,entity) ,method: :delete,data: { confirm: "Are you sure for deleting this entity"}   %>
+    </td>
+  <%end%>
+
+</tr> 

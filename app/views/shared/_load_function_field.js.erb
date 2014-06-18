@@ -1,0 +1,1 @@
+<%= select_tag  "function_field" ,  options_for_select( field.collect{ |d| [ d.name , d.name , {data: { arg: d.id}}] }.insert(0,"") ),:class => "function_field" %>

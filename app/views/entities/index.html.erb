@@ -1,0 +1,39 @@
+<h1> Project Information </h1>
+<div> 
+	
+
+	<ul class="nav nav-tabs">
+    <li>
+      <%= link_to("Project Information",  @project  , data: {toggle: ""} ) %>
+    </li>
+
+    <li >
+      <%= link_to("Collaborators",  project_collaborations_path(@project)  , data: {toggle: ""} ) %>
+    </li>
+
+    <li class="active">
+      <%= link_to("Table",  project_entities_path(@project)  , data: {toggle: ""} ) %>
+    </li>
+
+    <%project=Project.find(params[:project_id].to_i)%>
+
+    <% if current_user == project.user %>
+    	<div class="navbar-search pull-right">
+        <%= form_tag(project_collaborations_path(Project.find(params[:project_id].to_i)), method: "post") do %>
+          Email <%= text_field_tag(:email) %>
+          <%= hidden_field_tag :pid, project.id %>
+          <%= submit_tag("Add") %>
+        <% end %>
+      </div>
+    <%end%>
+  </ul>
+
+
+  <div class="tab-content">
+
+    <div id="table" class="tab-pane fade in active">
+      <%= render partial: 'shared/index_entities' %>
+    </div>
+  </div>
+	
+</div>

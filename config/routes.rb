@@ -1,4 +1,26 @@
 DbNinja::Application.routes.draw do
+  devise_for :users
+  get "users/home"
+  get "users/list"
+  
+  root to: 'users#home'
+
+  resources :constraints
+
+  resources :projects do
+    member do
+      get :submit_query 
+      post :report_query
+      post :query_div
+      post :constraints_load
+      post :arguments_load
+      post :load_function_field_div
+    end
+    resources :collaborations
+    resources :entities do
+      resources :fields
+    end
+  end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

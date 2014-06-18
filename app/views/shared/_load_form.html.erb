@@ -1,0 +1,16 @@
+<% str = "argument"+"_"+entity_counter.to_s+"_"+field_counter.to_s+"_"+constraint_counter.to_s+"_"+argument_counter.to_s%>
+<div class = "form-group span6 offset3 check_blank">
+  <% if arg_name == "date" %>
+    <%=text_field_tag str , nil , class: "Datepicker Constraint_Arg" , id: str %>
+  <%elsif arg_name == "boolean"%>
+    <%=check_box_tag str , true , false , class: "Constraint_Arg" , id: str %>
+  <%else%>
+    <%=text_field_tag str , nil , class: "Constraint_Arg" , id: str %>
+  <%end%>
+</div>
+<% arg_name %>
+<% "Arg_type "+arg_type.to_s + " sdjfkdsf" %>
+<% constraint_counter %>
+<% entity_counter %>
+<% field_counter %>
+<% argument_counter %>

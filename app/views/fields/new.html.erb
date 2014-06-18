@@ -1,0 +1,43 @@
+<div class="span10 offset1">
+  <h1>
+    Add a new column
+  </h1>
+</div>
+<div class="row">
+  <div class="span10 offset1">
+    <%= form_tag(project_entity_fields_path( @project , @entity ) , method: "post") do %>
+      <div class="form-group">
+         <%= label_tag "Attribute Name"%>
+
+         <%= text_field_tag(:name) %> 
+      </div>
+
+      <div class="form-group">
+        <%= label_tag "Default"%>
+        <%= text_field_tag(:default) %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag "Can it be Null"  %>
+        <%= select_tag( :null_id, options_for_select( [["Yes", "1"],["No","0"]] ) ) %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag "Select the datatype"%>
+        <%#collection_select(:type, :name, Datatype.find(:all), :name,:name,{},{ name: "type_name" })%>
+
+        <%= select_tag  "type_name" ,  options_for_select( Datatype.find(:all).collect{ |d| [ d.name , d.name , {data: { arg: d.arg}}] } ) %>
+
+      </div>
+
+      <div class="form-group">
+        <div id="arg1" style="display:none">First Argument <%= text_field_tag(:type_arg1)%></div>
+      </div>
+      <div class="form-group">
+        <div id="arg2" style="display:none">Second Argument <%= text_field_tag(:type_arg2) %></div>
+      </div>
+      <%= submit_tag("Add" , class: "btn btn-primary btn-medium") %>
+
+    <% end %>
+  </div>
+</div>

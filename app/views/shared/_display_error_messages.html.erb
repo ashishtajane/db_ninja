@@ -1,0 +1,7 @@
+<% unless @errors.nil? %>
+  <% @errors.each do |error| %>
+    <% if error.include? str %>
+      <font color="red" size=1.5px>*<%=error%></font>
+    <%end%>
+  <%end%>
+<%end%>
