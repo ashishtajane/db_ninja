@@ -15,6 +15,11 @@
 //= require_tree .
 //= require jquery.ui.all
 
+//= require jsapi
+
+//= require chartkick
+
+
 /*
  *= require jquery.ui.all
  */

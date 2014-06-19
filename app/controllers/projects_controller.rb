@@ -109,6 +109,8 @@ class ProjectsController < ApplicationController
     if @group_clause != ""
       @query_to_be_fired = @query_to_be_fired + " group by " + @group_clause
     end
+    @dbname = @project.dbname
+    @dbpassword = params[:dbpassword]
   end
 
   def query_div

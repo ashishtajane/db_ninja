@@ -1,5 +1,10 @@
 <%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id},id: "query_form") do %>
   
+  <div class = "form-group">
+    <%= label_tag "Enter your database password"  %>
+    <%= password_field_tag(:dbpassword) %>
+  </div>
+
   <div class="form-group functions">
     <%= label_tag "Choose the Function"  %>
     <%= select_tag  "function" ,  options_for_select( [["Count","count"],["Maximum","max"],["Minimum","min"],["Average","avg"]]) %>
@@ -21,11 +26,8 @@
       <%#=render partial:'shared/query_select_fields' ,locals: {field: @project.entities.first.fields,counter: "1"}%>
     </div>
   </div>
+    
 
   <%= submit_tag("Submit" , class: "btn btn-primary btn-medium") %>
-
-<div class="trash">
-  <%#=text_field_tag(:msa, value = nil, id: "datepicker") %>
-</div>
 
 <% end %>
