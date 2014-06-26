@@ -164,23 +164,24 @@ class ProjectsController < ApplicationController
         @making_graph.push(v)
       end
       @actual_graph = @making_graph
+    elsif (params["coming_from_submit_query"] =="2")
+      @actual_graph = get_array_form(params["actual_graph"])
+      @making_graph = @actual_graph
     else
-      @making_graph = [ [["A","B"],1] , [["C","D"],2] ]
-      @actual_graph = [ [["A","B"],1] , [["C","D"],2] ]
-      # debugger
+      answer = get_array_form(params["making_graph"])
+      @actual_graph = get_array_form(params["actual_graph"])
+      if ( params.include? "operation")
+        @making_graph = find_query(params["operation"],params["graph_argument_1"],params["graph_argument_2"],answer)
+      end
     end
   end
 
-  def modify_graph
-    debugger
-  end
 
   def query_div
     @entity = @project.entities.find(params["entity_selected"].to_i)
     @fields = @entity.fields
     @counter = params["entity_counter"]
     # @field_counter = params["field_counter"]
-    #debugger
     respond_to do |format|
       format.js {}
     end
@@ -219,6 +220,44 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+    def find_query(operation,input1,input2,arr)
+      answer = []
+      arr.each do |x|
+        if( operation == "1" )
+          if( x[1] > input1)
+            answer.push(x)
+          end
+        end
+        if( operation == "2" )
+          if( x[1] < input1)
+            answer.push(x)
+          end
+        end
+        if( operation == "3" )
+          if( x[1] > input1 && x[1] < input2)
+            answer.push(x)
+          end
+        end
+      end
+      return answer
+    end
+
+    def get_array_form(input_string)
+      answer  = []
+      input_string = input_string.split('*&^%$#!@')
+
+      input_string.each do
+        |x|
+        y = x.split('!@#~%$@#!')
+        a=y[0,y.size-1]
+        b= []
+        b.push(a)
+        b.push(y[y.size-1])
+        answer.push(b)
+      end
+      return answer
+    end
 
     def get_extra_select(param)
       s=[]

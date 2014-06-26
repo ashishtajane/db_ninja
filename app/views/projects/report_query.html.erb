@@ -1,19 +1,27 @@
-
-
-
-  <%#= hidden_field_tag :coming_from_submit_query, "0" %>
-
 <% sending_data =[] %>
 <% @making_graph.each do |x| %>
   <%sending_data.push ( x.join("!@#~%$@#!") ) %>
 <%end%>
 
 
-<%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id},id: "query_form") do %>
+<% actual_data =[] %>
+<% @actual_graph.each do |x| %>
+  <%actual_data.push ( x.join("!@#~%$@#!") ) %>
+<%end%>
 
+<%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id}) do %>
+  <%= hidden_field_tag :coming_from_submit_query, "2" %>
   <%= hidden_field_tag :project_id , @project.id ,id: "project_id"%>
   <%= hidden_field_tag :making_graph , sending_data.join("*&^%$#!@"),id: "making_graph" %>
-  <%= hidden_field_tag :actual_graph , @actual_graph,id: "actual_graph" %>  
+  <%= hidden_field_tag :actual_graph , actual_data.join("*&^%$#!@"),id: "actual_graph" %>  
+  <%= submit_tag("Load Original Graph" , class: "btn btn-primary btn-medium") %>
+<%end%>
+
+<%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id}) do %>
+  <%= hidden_field_tag :coming_from_submit_query, "0" %>
+  <%= hidden_field_tag :project_id , @project.id ,id: "project_id"%>
+  <%= hidden_field_tag :making_graph , sending_data.join("*&^%$#!@"),id: "making_graph" %>
+  <%= hidden_field_tag :actual_graph , actual_data.join("*&^%$#!@"),id: "actual_graph" %>  
   <div class = "graph_reduce">
     <%= label_tag "Choose the parameters for graph"  %>
     <%= select_tag  "operation" ,  options_for_select( [ ["","0"],["Entries greater than","1"],["Entries less than","2"],["Entires in between","3"]]) %>
@@ -21,8 +29,9 @@
     <input id = "graph2" type="text" name="graph_argument_2" disabled="disabled">
   </div>
   <%= submit_tag("Submit" , class: "change_graph btn btn-primary btn-medium") %>
-
 <%end%>
+
+
 
 
 <div class = "pie" >
