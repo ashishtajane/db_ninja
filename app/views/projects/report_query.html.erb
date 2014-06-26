@@ -1,7 +1,47 @@
-<%#= %x[ mysql -D demodata -u root -pdev -e @query_to_be_fired ] %>
-<% query = @query_to_be_fired %>
-<%= command = "mysql -D "+@dbname+" -u root -p"+@dbpassword+" -e " + "\""+query+"\"" %>
 
-<%= value = `#{command}`%>
 
-<%#= pie_chart({  ["Football","Cjksd","sdf"] => 10,["Footba1ll","Cjksd","sdf"] => 10,["Foo2tball","Cjksd","sdf"] => 10,["Foot3ball","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Foot6ball","Cjksd","sdf"] => 10,["F234otball","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","C78jksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Foot123ball","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Footb46all","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjks45d","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Footba234ll","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cj345ksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["Football","Cjksd","sdf"] => 10,["F243ootball","Cjksd","sdf"] => 10,["Foot47ball","Cjksd","sdf"] => 10, ["Bask48etball","sdjk","sdhgfhkgi"] => 5}) %>
+
+  <%#= hidden_field_tag :coming_from_submit_query, "0" %>
+
+<% sending_data =[] %>
+<% @making_graph.each do |x| %>
+  <%sending_data.push ( x.join("!@#~%$@#!") ) %>
+<%end%>
+
+
+<%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id},id: "query_form") do %>
+
+  <%= hidden_field_tag :project_id , @project.id ,id: "project_id"%>
+  <%= hidden_field_tag :making_graph , sending_data.join("*&^%$#!@"),id: "making_graph" %>
+  <%= hidden_field_tag :actual_graph , @actual_graph,id: "actual_graph" %>  
+  <div class = "graph_reduce">
+    <%= label_tag "Choose the parameters for graph"  %>
+    <%= select_tag  "operation" ,  options_for_select( [ ["","0"],["Entries greater than","1"],["Entries less than","2"],["Entires in between","3"]]) %>
+    <input id = "graph1" type="text" name="graph_argument_1" disabled="disabled">
+    <input id = "graph2" type="text" name="graph_argument_2" disabled="disabled">
+  </div>
+  <%= submit_tag("Submit" , class: "change_graph btn btn-primary btn-medium") %>
+
+<%end%>
+
+
+<div class = "pie" >
+  <%= pie_chart(@making_graph) %>
+</div>
+
+<div class ="column" >
+  <%= column_chart @making_graph %>
+</div>
+
+<%#= bar_chart making_graph %>
+
+
+
+<%#debugger%>
+
+<%#= pie_chart [ [ ["Football"], 10], [["nsdbfldsfgl","Basketball","jksdfto"], 5]] %>
+<%#= pie_chart({ ["Foot ball","sdf"] => 10,["Cjsdksd","sdf"] => 10}) %>
+
+<%#= pie_chart([[23,2,26],[234,1,18]])%>
+
+<%#= pie_chart ({["273", "Johann Zboncak I"]=>26, ["278", "Mr. Jazmin Gorczany"]=>18} )%>

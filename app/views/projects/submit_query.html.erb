@@ -1,5 +1,5 @@
 <%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id},id: "query_form") do %>
-  
+  <%= hidden_field_tag :coming_from_submit_query, "1" %>  
   <div class = "form-group">
     <%= label_tag "Enter your database password"  %>
     <%= password_field_tag(:dbpassword) %>
@@ -14,7 +14,19 @@
       <%= select_tag  "function_entity" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.table_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "Function_Model" %>
     </div>
   </div>
+  <h3> Choose Joining Parameters </h3>
+  <div class="Join_Div" id="join_div_1">
+    <%= select_tag "join_tag_1" , options_for_select(@joining_params.collect {|d|   [ d["name"] , d["value"] ] }.insert(0,"") ) ,class: "Join",id: "join_1" %>
+    is related to 
+    <%= select_tag "relation_tag_1" , options_for_select(@joining_params.collect {|d|   [ d["name"] , d["value"] ] }.insert(0,"") ) ,class: "Join",id: "relate_1" %>
+    <button class="join_add" type="button" disabled="disabled" >Plus</button>
+  </div>
 
+  <h3> Choose any other select parameters </h3>
+  <div class = "select_div" id = "select_div_1" >
+    <%= select_tag "select_tag_1" , options_for_select(@joining_params.collect {|d|   [ d["name"] , d["value"] ] }.insert(0,"") ) ,class: "Select",id: "select_1" %>
+    <button class="select_add" type="button" disabled="disabled" >Plus</button>
+  </div>
   <h3 class="Entities" style = "display:none;"> Choose Grouping Parameters </h3>
   <div class="Entities" id="entity_1" style = "display:none;">
     <div class="form-group">

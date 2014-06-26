@@ -103,7 +103,6 @@ ready = function(){
 
     //AJAX PART HERE
     if($(this).val()==""){
-      alert("Enable Function")
       $(this).parent().find('.Constraints').find('.check_blank').remove();
       console.log("Empty Selected")
       $(this).parent().find('.field_above').remove();
@@ -129,6 +128,40 @@ ready = function(){
     bind_functions();
     //$(".property_dropdown").change(enable_function());    
   };
+
+  var change_graph_ajax_call = function(event){
+    var parent = $(this).parent();
+    var selected = parent.find("#operation");
+    var input1 = parent.find("#graph1")
+    var input2 = parent.find("#graph2")
+    console.log(input1.val());
+    console.log(selected.val());
+    
+    if ( selected.val()=="0" ){
+      event.preventDefault();
+      alert("You need to select some condition before executing")
+    }
+    else if ((selected.val()=="1" || selected.val()=="2") && input1.val()==""){
+      event.preventDefault();
+      alert("Please fill the input box to move further")
+    }
+    else if( selected.val()=="3"  && (input1.val()=="" || input2.val()=="")){
+        event.preventDefault();
+        alert("please fill both the input boxes")
+    }
+    else{
+      //AJAX Call
+      //alert("Moving to Ajax :D")
+      // $.ajax({
+      //   url: "/projects/"+ $("#project_id").val() + "/modify_graph",
+      //   type: "POST",
+      //   data: { "graph_data": $("#making_graph").val() ,"operation": $("#operation").val() , "graph1": $("#graph1").val(), "graph2": $("#graph2").val()}
+      // });
+      //$('#change_graph').unbind('click');
+    }
+
+    bind_functions(); 
+  }
 
   var display_arguments_and_next_cons=function(){
 
@@ -223,6 +256,7 @@ ready = function(){
     select.attr('name',string_manipulation(2,select.attr('name')))
     add.show()
     $(".add_arguments").before(add);
+
     bind_functions();
   }
 
@@ -250,6 +284,103 @@ ready = function(){
     bind_functions();
 
   }
+  var enable_disable_button = function(){
+    var parent = $(this).parent()
+    var id = $(this).attr('id')
+    var counter = id.split('_')[1]
+    var select1_value = parent.find("#join_"+counter).val()
+    var select2_value = parent.find("#relate_"+counter).val()
+    if(select1_value != "" && select2_value != "" ){
+      parent.find(".join_add").removeAttr('disabled');
+    }
+    else{
+      parent.find(".join_add").attr("disabled",true); 
+    }
+    bind_functions();
+  }
+
+  var add_join = function(){
+    var to_add = $(this).parent().clone();
+    var idval = to_add.attr('id')
+    var counter = idval.split("_")[2]
+
+    to_add.attr('id',string_manipulation(2,"join_div_"+counter));
+
+    to_add.find("#join_"+counter).attr('name', string_manipulation(2,"join_tag_"+counter));
+    to_add.find("#join_"+counter).attr('id', string_manipulation(1,"join_"+counter));
+
+    to_add.find("#relate_"+counter).attr('name', string_manipulation(2,"relation_tag_"+counter));
+    to_add.find("#relate_"+counter).attr('id', string_manipulation(1,"relate_"+counter));
+
+    to_add.find(".join_add").attr("disabled",true);
+
+    $(this).parent().after(to_add);
+    var button = "<button class=\"remove_join\" type=\"button\"  >Remove</button>";
+    $(this).replaceWith(button)
+    bind_functions();
+
+  }
+
+  var add_select = function(){
+    var to_add = $(this).parent().clone();
+    var idval = to_add.attr('id')
+    var counter = idval.split("_")[2]
+    
+    to_add.attr('id',string_manipulation(2,"join_div_"+counter)); 
+
+    to_add.find("#select_"+counter).attr('name', string_manipulation(2,"select_tag_"+counter));
+    to_add.find("#select_"+counter).attr('id', string_manipulation(1,"select_"+counter)); 
+    to_add.find(".select_add").attr("disabled",true);
+
+    $(this).parent().after(to_add);
+    var button = "<button class=\"remove_select\" type=\"button\"  >Remove</button>";
+    $(this).replaceWith(button)
+    bind_functions();
+  }
+
+  var remove_join = function(){
+    $(this).parent().remove()
+    bind_functions();
+  }
+
+  var remove_select = function(){
+    $(this).parent().remove()
+    bind_functions(); 
+  }
+
+  var enable_select_plus = function(){
+    var parent = $(this).parent()
+    var id = $(this).attr('id')
+    var counter = id.split('_')[1]
+    var select_value = parent.find("#select_"+counter).val()
+    if ( select_value != "" ){
+      parent.find(".select_add").removeAttr('disabled');
+    }
+    else{
+      parent.find(".select_add").attr("disabled",true);  
+    }
+    bind_functions();
+  }
+
+  var enable_graph_function = function(){
+    var parent =  $(this).parent();
+    var selected_value = parseInt($(this).val())
+    if ( selected_value == 0 ){
+      parent.find("#graph1").attr("disabled",true);
+      parent.find("#graph2").attr("disabled",true);
+    }
+    else if (selected_value == 1 || selected_value == 2){
+      parent.find("#graph1").removeAttr("disabled");
+      parent.find("#graph2").attr("disabled",true);   
+    }
+    else{
+      parent.find("#graph1").removeAttr("disabled");
+      parent.find("#graph2").removeAttr("disabled");
+    }
+    bind_functions();
+  }
+
+
 
   var bind_functions = function(){
 
@@ -263,6 +394,14 @@ ready = function(){
     $(".field_above").off("change").on("change",display_arguments_and_next_cons);
     $(".Function_Model").off("change").on("change",show_fields_and_unhide_Entities)
     $( ".Datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
+    $(".Join").off("change").on("change",enable_disable_button);
+    $(".join_add").off("click").on("click",add_join);
+    $(".remove_join").off("click").on("click",remove_join);
+    $(".Select").off("change").on("click",enable_select_plus);
+    $(".select_add").off("click").on("click",add_select);
+    $(".remove_select").off("click").on("click",remove_select);
+    $("#operation").off("change").on("change",enable_graph_function);
+    $(".change_graph").off("click").on("click",change_graph_ajax_call);
     // $(".property_dropdown_cons").off("change").on("change",change_constraints_function);
     //$(".add_property").on("click", plus_function);
     //$(".remove_property").on("click", remove_function);

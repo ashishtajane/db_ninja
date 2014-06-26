@@ -36,81 +36,143 @@ class ProjectsController < ApplicationController
   end
 
   def submit_query
+    @joining_params = []
+    @all_entities = @project.entities
+    @all_entities.each do
+      |entity|
+      fields = entity.fields
+      fields.each do
+        |field|
+        a={}
+        a["name"] = (entity.model_name.to_s + " <=> ")+field.name.to_s
+        a["value"] = (entity.table_name.to_s + " <=> ")+field.name.to_s
+        @joining_params.push(a)
+      end
+    end
   end
 
   def report_query
-    param = params.sort_by {|x,y| x}
+    if ( params["coming_from_submit_query"] =="1")
+      param = params.sort_by {|x,y| x}
 
-    separate_where =[]
+      separate_where =[]
 
-    param.each do
-      |x,y|
-      if x.include? "selection" and y =="where"
-        separate_where.push(x.split("_")[1])
-      end
-    end
-
-    entity_map = get_entity_map(param)
-    field_map = get_field_map(param,entity_map)
-    group_map = get_groups(field_map)
-    constraints = get_constraints(group_map,param)
-    @value = {}
-    @where_clause = ""
-    @select_clause = params["function"] + "(" + params["function_entity"]+"."+params["function_field"]+")"
-    arr = entity_map.map { |x,y| y}.uniq
-    unless arr.include? params["function_entity"]
-      flash.now[:error] = "Model Name selected should occur in grouping"
-      render 'submit_query'
-    end
-    @from_clause = arr.join(",")
-
-    array_for_grouping = []
-    group_map.each { 
-      |x,y| 
-      flag=false
-      y.each do
-        |str|
-        unless separate_where.include? str.split("_")[0]
-          flag=true
+      param.each do
+        |x,y|
+        if x.include? "selection" and y =="where"
+          separate_where.push(x.split("_")[1])
         end
       end
-      if flag 
-        array_for_grouping.push(x[0]+"."+x[1])
-      end
-    }
-    
-    @group_clause = array_for_grouping.uniq.join(",")
 
-    constraints.each do
-      |x,y|
-      z=""
-      y.each do
-        |s|
-        if( z== "")
-          z = z+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
-        else
-          z = z+" and "+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
-        end
-      end
-      @value[x] = z
-      if @where_clause == ""
-        @where_clause = @where_clause + z
+      
+
+      entity_map = get_entity_map(param)
+      field_map = get_field_map(param,entity_map)
+      group_map = get_groups(field_map)
+      constraints = get_constraints(group_map,param)
+      @value = {}
+      @where_clause = ""
+
+      @extra_select_params = get_extra_select(param)
+
+      @select_clause = @extra_select_params.join(',')
+
+      
+
+      if( @select_clause != "" )
+        @select_clause = @select_clause + ","
       else
-        @where_clause = @where_clause + " and " +z
+        @select_clause = ""
       end
+
+      @select_clause = @select_clause +  params["function"] + "(" + params["function_entity"]+"."+params["function_field"]+")" 
+
+      from_c,where_c = get_from_where ( param )
+
+      arr = (from_c + entity_map.map { |x,y| y}).uniq
+
+      @from_clause = arr.join(",")
+
+      array_for_grouping = []
+      group_map.each { 
+        |x,y| 
+        flag=false
+        y.each do
+          |str|
+          unless separate_where.include? str.split("_")[0]
+            flag=true
+          end
+        end
+        if flag 
+          array_for_grouping.push(x[0]+"."+x[1])
+        end
+      }
+      
+      @group_clause = array_for_grouping.uniq.join(",")
+
+      constraints.each do
+        |x,y|
+        z=""
+        y.each do
+          |s|
+          if( z== "")
+            z = z+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+          else
+            z = z+" and "+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+          end
+        end
+        @value[x] = z
+        if @where_clause == ""
+          @where_clause = @where_clause + z
+        else
+          @where_clause = @where_clause + " and " +z
+        end
+      end
+
+      if @where_clause == ""
+        @where_clause = where_c.join(' and ')
+      else
+        @where_clause = ( @where_clause + ' and ') + where_c.join(' and ')
+      end
+
+      if @group_clause != ""
+        @select_clause = @group_clause + "," + @select_clause
+      end
+      @query_to_be_fired = "select " + @select_clause + " from " + @from_clause 
+      if @where_clause != ""
+        @query_to_be_fired = @query_to_be_fired + " where " + @where_clause
+      end
+      if @group_clause != ""
+        @query_to_be_fired = @query_to_be_fired + " group by " + @group_clause
+      end
+      @dbname = @project.dbname
+      @dbpassword = params[:dbpassword]
+
+      query = @query_to_be_fired
+      command = "mysql -D "+@dbname+" -u root -p"+@dbpassword+" -e " + "\""+query+"\""
+
+      value = `#{command}`
+      answer = value.split("\n")
+      answer = answer[1,answer.size-1]
+      @making_graph = []
+      answer.each_index do |i|
+        answer[i] = answer[i].split("\t")
+        push_value = answer[i][0,answer[i].size-1]
+        v= []
+        v.push(push_value)
+        v.push ( answer[i][answer[i].size-1] )
+        @making_graph.push(v)
+      end
+      @actual_graph = @making_graph
+    else
+      @making_graph = [ [["A","B"],1] , [["C","D"],2] ]
+      @actual_graph = [ [["A","B"],1] , [["C","D"],2] ]
+      # debugger
     end
-    if @group_clause != ""
-      @select_clause = @group_clause + "," + @select_clause
-    end
-    @query_to_be_fired = "select " + @select_clause + " from " + @from_clause 
-    if @where_clause != ""
-      @query_to_be_fired = @query_to_be_fired + " where " + @where_clause
-    end
-    if @group_clause != ""
-      @query_to_be_fired = @query_to_be_fired + " group by " + @group_clause
-    end
-    @dbname = @project.dbname
-    @dbpassword = params[:dbpassword]
+  end
+
+  def modify_graph
+    debugger
   end
 
   def query_div
@@ -157,6 +219,45 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+    def get_extra_select(param)
+      s=[]
+      param.each do
+        |p,q|
+        if p.include? "select_tag"
+          if (q!="")
+            s.push((q.split(' <=> ')).join('.'))
+          end
+        end
+      end
+      return s.uniq
+    end
+
+    def get_from_where(param)
+      join = []
+      relation = []
+      where = []
+      from = []
+      param.each do
+        |x,y|
+        if x.include? "join_tag"
+          m = y.split(' <=> ')
+          join.push((m[0]+ ".") + m[1] )
+        end
+        if x.include? "relation_tag"
+          m = y.split(' <=> ')
+          relation.push((m[0]+ ".") + m[1] )
+        end
+      end
+      join.each_index do |i|
+        if join[i].split(".")[0] != relation[i].split(".")[0]
+          from.push(join[i].split(".")[0])
+          from.push(relation[i].split(".")[0])
+          where.push( (join[i] + "=") + relation[i])
+        end
+      end
+      return from,where
+    end
 
     def project_params
       params.require(:project).permit(:name,:description, :host, :dbusername,:dbpassword,:adapter,:dbname)

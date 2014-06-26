@@ -15,6 +15,7 @@ DbNinja::Application.routes.draw do
       post :constraints_load
       post :arguments_load
       post :load_function_field_div
+      post :modify_graph
     end
     resources :collaborations
     resources :entities do
