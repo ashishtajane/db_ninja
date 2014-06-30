@@ -380,7 +380,68 @@ ready = function(){
     bind_functions();
   }
 
+  var get_mean = function(arr){
+    //console.log(arr)
+    var count = arr.length; 
+    var sum = 0; 
+    for (i=0 ;i<count;i++){
+      sum = sum + arr[i]
+    }
+    var total = sum / count;
+    return total;
+  }
 
+  var get_median = function(arr){
+    arr.sort(); 
+    var middle =Math.round(arr.length / 2); 
+    var total = arr[middle-1];
+    return total;
+  }
+
+  var get_mode = function(arr){
+    var frequency = {};  // array of frequency.
+    var max = 0;  // holds the max frequency.
+    var result;   // holds the max frequency element.
+    for(var v in arr) {
+      frequency[arr[v]]=(frequency[arr[v]] || 0)+1; // increment frequency.
+      if(frequency[arr[v]] > max) { // is this frequency > max so far ?
+        max = frequency[arr[v]];  // update max.
+        result = arr[v];          // update result.
+      }
+    }
+    return result;
+  }
+
+  var get_height = function(arr){
+    arr = arr.split('*&^%$#!@');
+    var height=[];
+    for (i = 0; i < arr.length; i++) {
+      bucket = arr[i].split('!@#~%$@#!');
+      //console.log(bucket)
+      height.push(parseInt(bucket[bucket.length-1]));
+    }
+    //console.log(height)
+    return height;
+  }
+
+  var get_mean_median_mode = function(){
+    var selected = $(this).val()
+    var parent = $(this).parent()
+    //console.log(selected)
+    var arr = parent.find("#making_graph").val()
+    arr = get_height(arr)
+    console.log(arr)
+    if(selected == "1"){
+      parent.find("#mmm").val(get_mean(arr))
+    }
+    else if(selected == "2"){
+      parent.find("#mmm").val(get_median(arr))
+    }
+    else{
+      parent.find("#mmm").val(get_mode(arr)) 
+    }
+    bind_functions()
+  }
 
   var bind_functions = function(){
 
@@ -402,6 +463,7 @@ ready = function(){
     $(".remove_select").off("click").on("click",remove_select);
     $("#operation").off("change").on("change",enable_graph_function);
     $(".change_graph").off("click").on("click",change_graph_ajax_call);
+    $(".mean_median").off("change").on("change",get_mean_median_mode);
     // $(".property_dropdown_cons").off("change").on("change",change_constraints_function);
     //$(".add_property").on("click", plus_function);
     //$(".remove_property").on("click", remove_function);

@@ -2,18 +2,25 @@
 <% @making_graph.each do |x| %>
   <%sending_data.push ( x.join("!@#~%$@#!") ) %>
 <%end%>
-
-
 <% actual_data =[] %>
 <% @actual_graph.each do |x| %>
   <%actual_data.push ( x.join("!@#~%$@#!") ) %>
 <%end%>
 
+<div class = "MMM" >
+  <%= hidden_field_tag :making_graph , sending_data.join("*&^%$#!@"),id: "making_graph" %>
+  <%= label_tag "Get Mean , Median or Mode"  %>
+  <%= select_tag  "mean_median" ,  options_for_select( [["Get Mean","1"],["Get Median","2"],["Get Mode","3"]].insert(0,"")) , class: "mean_median" %>
+  <input id="mmm" type = "text" >
+</div>
+
 <%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id}) do %>
   <%= hidden_field_tag :coming_from_submit_query, "2" %>
   <%= hidden_field_tag :project_id , @project.id ,id: "project_id"%>
   <%= hidden_field_tag :making_graph , sending_data.join("*&^%$#!@"),id: "making_graph" %>
-  <%= hidden_field_tag :actual_graph , actual_data.join("*&^%$#!@"),id: "actual_graph" %>  
+  <%= hidden_field_tag :actual_graph , actual_data.join("*&^%$#!@"),id: "actual_graph" %> 
+  <%= hidden_field_tag :header , @header.join("*&^%$#!@"),id: "header" %>
+  <%= hidden_field_tag :actual_header , @actual_header.join("*&^%$#!@"),id: "actual_header" %> 
   <%= submit_tag("Load Original Graph" , class: "btn btn-primary btn-medium") %>
 <%end%>
 
@@ -22,6 +29,8 @@
   <%= hidden_field_tag :project_id , @project.id ,id: "project_id"%>
   <%= hidden_field_tag :making_graph , sending_data.join("*&^%$#!@"),id: "making_graph" %>
   <%= hidden_field_tag :actual_graph , actual_data.join("*&^%$#!@"),id: "actual_graph" %>  
+  <%= hidden_field_tag :header , @header.join("*&^%$#!@"),id: "header" %>
+  <%= hidden_field_tag :actual_header , @actual_header.join("*&^%$#!@"),id: "actual_header" %> 
   <div class = "graph_reduce">
     <%= label_tag "Choose the parameters for graph"  %>
     <%= select_tag  "operation" ,  options_for_select( [ ["","0"],["Entries greater than","1"],["Entries less than","2"],["Entires in between","3"]]) %>
@@ -31,6 +40,30 @@
   <%= submit_tag("Submit" , class: "change_graph btn btn-primary btn-medium") %>
 <%end%>
 
+<% unless @header.size == 0 %>
+  <h3> Further Grouping </h3>
+  <%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id}) do %>
+    <%= hidden_field_tag :coming_from_submit_query, "3" %>
+    <%= hidden_field_tag :project_id , @project.id ,id: "project_id"%>
+    <%= hidden_field_tag :making_graph , sending_data.join("*&^%$#!@"),id: "making_graph" %>
+    <%= hidden_field_tag :actual_graph , actual_data.join("*&^%$#!@"),id: "actual_graph" %>  
+    <%= hidden_field_tag :header , @header.join("*&^%$#!@"),id: "header" %>
+    <%= hidden_field_tag :actual_header , @actual_header.join("*&^%$#!@"),id: "actual_header" %> 
+    <div class = "function_choose">
+      <%= label_tag "Choose the function for grouping"  %>
+      <%= select_tag  "fun_graph" ,  options_for_select( [ ["","0"],["Sum","Sum"],["Average","Average"],["Maximum","Maximum"],["Minimum","Minimum"]]) %>
+    </div>
+    <div class = "graph_grouping">
+      <% @header.each_index do |i| %>
+        <div class = "form-group">
+          <%= @header[i] %>
+          <%= check_box_tag "graph_group_"+i.to_s, i %>
+        </div>
+      <%end%>
+    </div>
+    <%= submit_tag("Group" , class: "group_graph btn btn-primary btn-medium") %>
+  <%end%>
+<%end%>
 
 
 

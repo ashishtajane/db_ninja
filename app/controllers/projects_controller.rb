@@ -52,6 +52,8 @@ class ProjectsController < ApplicationController
   end
 
   def report_query
+    @header = []
+    @actual_header = []
     if ( params["coming_from_submit_query"] =="1")
       param = params.sort_by {|x,y| x}
 
@@ -77,7 +79,7 @@ class ProjectsController < ApplicationController
 
       @select_clause = @extra_select_params.join(',')
 
-      
+      @header = @extra_select_params
 
       if( @select_clause != "" )
         @select_clause = @select_clause + ","
@@ -86,6 +88,7 @@ class ProjectsController < ApplicationController
       end
 
       @select_clause = @select_clause +  params["function"] + "(" + params["function_entity"]+"."+params["function_field"]+")" 
+
 
       from_c,where_c = get_from_where ( param )
 
@@ -107,7 +110,9 @@ class ProjectsController < ApplicationController
           array_for_grouping.push(x[0]+"."+x[1])
         end
       }
-      
+      @header =  array_for_grouping + @header 
+      @actual_header = @header
+
       @group_clause = array_for_grouping.uniq.join(",")
 
       constraints.each do
@@ -150,11 +155,11 @@ class ProjectsController < ApplicationController
 
       query = @query_to_be_fired
       command = "mysql -D "+@dbname+" -u root -p"+@dbpassword+" -e " + "\""+query+"\""
-
       value = `#{command}`
       answer = value.split("\n")
       answer = answer[1,answer.size-1]
       @making_graph = []
+      
       answer.each_index do |i|
         answer[i] = answer[i].split("\t")
         push_value = answer[i][0,answer[i].size-1]
@@ -164,12 +169,39 @@ class ProjectsController < ApplicationController
         @making_graph.push(v)
       end
       @actual_graph = @making_graph
+
     elsif (params["coming_from_submit_query"] =="2")
       @actual_graph = get_array_form(params["actual_graph"])
       @making_graph = @actual_graph
+      @actual_header = get_header(params["actual_header"])
+      @header = @actual_header
+
+    elsif (params["coming_from_submit_query"] =="3")
+      @actual_graph = get_array_form(params["actual_graph"])
+      @actual_header = get_header(params["actual_header"])
+      @making_graph = get_array_form(params["making_graph"])
+      @header = get_header(params["header"])
+
+      @minus_header = []
+      @index_header = []
+      
+      params.each do |p,q|
+        if p.include? "graph_group_"
+          @minus_header.push(@header[q.to_i])
+          @index_header.push(q.to_i)
+        end
+      end
+
+      if (@index_header.size!=0 and params["fun_graph"] != "" )
+        @header =  @minus_header
+        @making_graph = find_new_graph(@index_header, @making_graph,params["fun_graph"])
+      end
+
     else
       answer = get_array_form(params["making_graph"])
       @actual_graph = get_array_form(params["actual_graph"])
+      @actual_header = get_header(params["actual_header"])
+      @header = get_header(params["header"])
       if ( params.include? "operation")
         @making_graph = find_query(params["operation"],params["graph_argument_1"],params["graph_argument_2"],answer)
       end
@@ -257,6 +289,56 @@ class ProjectsController < ApplicationController
         answer.push(b)
       end
       return answer
+    end
+
+    def fun(arr,string)
+      sum = 0 
+      maximum =0
+      minimum = arr[0]
+      arr.each do |a|
+        sum = sum + a.to_i
+        maximum = ((maximum>a.to_i)? maximum : a.to_i)
+        minimum = ((minimum>a.to_i)? a.to_i : minimum)
+      end
+      avg = sum / arr.size 
+      if string == "Sum"
+        return sum
+      elsif string == "Average"
+        return avg
+      elsif string == "Maximum"
+        return maximum
+      elsif string == "Minimum"
+        return minimum
+      end
+    end
+
+    def find_new_graph(index_array,graph_to_be_modified,query_function)
+      return_hash = {}
+      graph_to_be_modified.each do |g|
+        arr = []
+        index_array.each do |i|
+          arr.push(g[0][i])
+        end
+        if return_hash.has_key? arr
+          return_hash[arr].push(g[1].to_i)
+        else
+          return_hash[arr]=[]
+          return_hash[arr].push(g[1].to_i)
+        end
+      end
+      return_graph  = []
+      return_hash.each do |r,s|
+        a=[]
+        a.push(r)
+        a.push(fun(s,query_function))
+        return_graph.push(a)
+      end
+      return return_graph
+    end
+
+    def get_header (input)
+      input = input.split('*&^%$#!@')
+      return input
     end
 
     def get_extra_select(param)
