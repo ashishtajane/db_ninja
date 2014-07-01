@@ -7,9 +7,9 @@ class ConstraintsController < ApplicationController
     if (var[:function_type]=="all")
       var[:function_type] = -1
     else
-      var[:function_type] = FunctionReturnType.find_by_name(params[:function_type])
+      var[:function_type] = FunctionReturnType.find_by_name(params[:function_type]).id
     end
-    var[:function_return_type] = FunctionReturnType.find_by_name(params[:function_type])
+    var[:function_return_type] = FunctionReturnType.find_by_name(params[:function_return_type]).id
     constraint = Constraint.new(display_content: var["display_content"], function_type: var["function_type"],sql_syntax: var["sql_function_name"],function_return_type_id: var["function_return_type"])
     if(constraint.save)
       ans = add_arguments (params)

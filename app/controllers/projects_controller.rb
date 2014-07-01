@@ -110,30 +110,36 @@ class ProjectsController < ApplicationController
       @actual_header = @header
 
       @group_clause = array_for_grouping.uniq.join(",")
-
       constraints.each do
         |x,y|
         z=""
         y.each do
           |s|
-          if( z== "")
-            z = z+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
-          else
-            z = z+" and "+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+          vv = get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+          if ( vv != "")
+            if( z== "")
+              z = z+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+            else
+              z = z+" and "+get_constraint_string(x[0]+"."+x[1],s.to_a,s.length-1)
+            end
           end
         end
         @value[x] = z
-        if @where_clause == ""
-          @where_clause = @where_clause + z
-        else
-          @where_clause = @where_clause + " and " +z
+        if z!=""
+          if @where_clause == ""
+            @where_clause = @where_clause + z
+          else
+            @where_clause = @where_clause + " and " +z
+          end
         end
       end
 
-      if @where_clause == ""
-        @where_clause = where_c.join(' and ')
-      else
-        @where_clause = ( @where_clause + ' and ') + where_c.join(' and ')
+      if where_c.size>=1
+        if @where_clause == ""
+          @where_clause = where_c.join(' and ')
+        else
+          @where_clause = ( @where_clause + ' and ') + where_c.join(' and ')
+        end
       end
 
       if @group_clause != ""
