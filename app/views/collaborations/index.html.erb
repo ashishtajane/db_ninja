@@ -1,10 +1,8 @@
 <h1> Project Information </h1>
 <div> 
-	
-
 	<ul class="nav nav-tabs">
     <li>
-      <%= link_to("Project Information",  Project.find(params[:project_id].to_i)  , data: {toggle: ""} ) %>
+      <%= link_to("Project Information",  @project  , data: {toggle: ""} ) %>
     </li>
 
     <li class="active">
@@ -12,21 +10,29 @@
     </li>
         
     <li>
-      <%= link_to("Tables",  project_entities_path(Project.find(params[:project_id].to_i))  , data: {toggle: ""} ) %>
+      <%= link_to("Tables",  project_entities_path(@project)  , data: {toggle: ""} ) %>
     </li>
 
-    <%project=Project.find(params[:project_id].to_i)%>
-    <% if current_user == project.user %>
+    <% if @project.collaborating_users.include? current_user %>
       <div class="navbar-search pull-right">
-        <%= form_tag(project_collaborations_path(Project.find(params[:project_id].to_i)), method: "post") do %>
-          Email <%= text_field_tag(:email) %>
-          <%= hidden_field_tag :pid, project.id %>
-          <%= submit_tag("Add") %>
-        <% end %>
+        <%= button_to "Collect Stats", submit_query_project_path(@project), :class => "btn btn-primary btn-medium", :method => :get %>
       </div>
     <%end%>
-  </ul>
 
+    <%#project=Project.find(params[:project_id].to_i)%> 
+
+    <%#if current_user == project.user %>
+      <!-- <div class="navbar-search pull-right"> -->
+        <%#= form_tag(project_collaborations_path(Project.find(params[:project_id].to_i)), method: "post") do %>
+          <!-- Email  -->
+          <%#= text_field_tag(:email) %>
+          <%#= hidden_field_tag :pid, project.id %>
+          <%#= submit_tag("Add") %>
+        <%# end %>
+      <!-- </div> -->
+    <%#end%>
+
+  </ul>
 
   <div class="tab-content">
 
@@ -34,10 +40,17 @@
 
     <div id="coll" class="tab-pane fade in active">
       <h3>Collaborators</h3>
-      <%#debugger%>
       <%= render partial: 'shared/display_users' , locals: {users: @collaborators}%>
     </div>
       
+    <%if current_user == @project.user %>
+      <%= form_tag(project_collaborations_path(@project), method: "post") do %>
+        Email <%= text_field_tag(:email) %>
+        <%= hidden_field_tag :pid, @project.id %>
+        <%= submit_tag("Add") %>
+      <% end %>
+    <%end%>
+
     <div id="table" class="tab-pane fade"></div>
 
   </div>

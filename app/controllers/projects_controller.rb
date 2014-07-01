@@ -1,8 +1,6 @@
 class ProjectsController < ApplicationController
-
   before_action :get_instance_variables ,only: [:show , :update , :edit ,:destroy,:submit_query, :query_div,:constraints_load,:load_function_field_div,:report_query]
-  before_action :check_collaborator,only: [:show , :update , :edit]
-  #before_action :owner_of_the_project, only: [:show]
+  before_action :check_collaborator,only: [:show , :update , :edit,:submit_query]
 
   def new
     @project = Project.new()
@@ -65,8 +63,6 @@ class ProjectsController < ApplicationController
           separate_where.push(x.split("_")[1])
         end
       end
-
-      
 
       entity_map = get_entity_map(param)
       field_map = get_field_map(param,entity_map)
@@ -151,22 +147,33 @@ class ProjectsController < ApplicationController
         @query_to_be_fired = @query_to_be_fired + " group by " + @group_clause
       end
       @dbname = @project.dbname
+      @dbusername = @project.dbusername
       @dbpassword = params[:dbpassword]
-
+      @host = @project.host
       query = @query_to_be_fired
-      command = "mysql -D "+@dbname+" -u root -p"+@dbpassword+" -e " + "\""+query+"\""
-      value = `#{command}`
-      answer = value.split("\n")
-      answer = answer[1,answer.size-1]
-      @making_graph = []
+
+      if @host.include? ':'
+        command = "mysql -h " + @host.split(':')[0] + " -p " + @host.split(':')[1] + "-D "+@dbname+" -u " + @dbusername + " -p"+@dbpassword+" -e " + "\""+query+"\""
+      else
+        #command = "mysql -h " + @host +  "-D "+@dbname+" -u " + @dbusername + " -p"+@dbpassword+" -e " + "\""+query+"\""
+        command = "mysql -h " + " localhost " +  "-D "+@dbname+" -u " + @dbusername + " -p"+@dbpassword+" -e " + "\""+query+"\""
+      end
       
-      answer.each_index do |i|
-        answer[i] = answer[i].split("\t")
-        push_value = answer[i][0,answer[i].size-1]
-        v= []
-        v.push(push_value)
-        v.push ( answer[i][answer[i].size-1] )
-        @making_graph.push(v)
+
+      value = `#{command}`
+      @ashish = command
+      @making_graph = []
+      if value != ""
+        answer = value.split("\n")
+        answer = answer[1,answer.size-1]
+        answer.each_index do |i|
+          answer[i] = answer[i].split("\t")
+          push_value = answer[i][0,answer[i].size-1]
+          v= []
+          v.push(push_value)
+          v.push ( answer[i][answer[i].size-1] )
+          @making_graph.push(v)
+        end
       end
       @actual_graph = @making_graph
 
@@ -191,12 +198,10 @@ class ProjectsController < ApplicationController
           @index_header.push(q.to_i)
         end
       end
-
       if (@index_header.size!=0 and params["fun_graph"] != "" )
         @header =  @minus_header
         @making_graph = find_new_graph(@index_header, @making_graph,params["fun_graph"])
       end
-
     else
       answer = get_array_form(params["making_graph"])
       @actual_graph = get_array_form(params["actual_graph"])
@@ -213,14 +218,12 @@ class ProjectsController < ApplicationController
     @entity = @project.entities.find(params["entity_selected"].to_i)
     @fields = @entity.fields
     @counter = params["entity_counter"]
-    # @field_counter = params["field_counter"]
     respond_to do |format|
       format.js {}
     end
   end
 
-  def constraints_load
-    
+  def constraints_load   
     @field = Field.find(params["field_selected"].to_i)
     @entity_counter = params["entity_counter"]
     @field_counter  = params["field_counter"]
@@ -257,17 +260,17 @@ class ProjectsController < ApplicationController
       answer = []
       arr.each do |x|
         if( operation == "1" )
-          if( x[1] > input1)
+          if( x[1].to_i > input1.to_i)
             answer.push(x)
           end
         end
         if( operation == "2" )
-          if( x[1] < input1)
+          if( x[1].to_i < input1.to_i)
             answer.push(x)
           end
         end
         if( operation == "3" )
-          if( x[1] > input1 && x[1] < input2)
+          if( x[1].to_i > input1.to_i && x[1].to_i < input2.to_i)
             answer.push(x)
           end
         end
@@ -361,14 +364,20 @@ class ProjectsController < ApplicationController
       from = []
       param.each do
         |x,y|
-        if x.include? "join_tag"
+        if x.include? "join_tag" and y!=""
           m = y.split(' <=> ')
-          join.push((m[0]+ ".") + m[1] )
+          index = x.split("_")[2]
+          z = params["relation_tag_"+index]
+          if z != ""
+            n = z.split(' <=> ')
+            join.push((m[0]+ ".") + m[1] )
+            relation.push((n[0]+ ".") + n[1] )
+          end
         end
-        if x.include? "relation_tag"
-          m = y.split(' <=> ')
-          relation.push((m[0]+ ".") + m[1] )
-        end
+        # if x.include? "relation_tag" and y!=""
+        #   m = y.split(' <=> ')
+        #   relation.push((m[0]+ ".") + m[1] )
+        # end
       end
       join.each_index do |i|
         if join[i].split(".")[0] != relation[i].split(".")[0]
@@ -381,7 +390,7 @@ class ProjectsController < ApplicationController
     end
 
     def project_params
-      params.require(:project).permit(:name,:description, :host, :dbusername,:dbpassword,:adapter,:dbname)
+      params.require(:project).permit(:name,:description, :host, :dbusername,:adapter,:dbname)
     end
 
     def get_instance_variables
@@ -419,7 +428,7 @@ class ProjectsController < ApplicationController
       entity_map={}
       params.each do
         |x,y|
-        if x.include? "entity_name"
+        if x.include? "entity_name" and y!=""
           entity_map[x.split("_")[2]]=y
         end
       end
@@ -497,13 +506,4 @@ class ProjectsController < ApplicationController
       end
       return constraints
     end
-
-  # def owner_of_the_project
-  #   @collaborating_users = Project.find(params[:id]).collaborating_users
-  #   unless @collaborating_users.include? current_user
-  #     flash[:error] = "You are not the collaborator for this project"
-  #     redirect_to root_url
-  #   end
-  # end
-
 end

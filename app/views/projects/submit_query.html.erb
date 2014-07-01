@@ -1,3 +1,5 @@
+<h1> Enter Your Query to collect your stats </h1>
+
 <%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id},id: "query_form") do %>
   <%= hidden_field_tag :coming_from_submit_query, "1" %>  
   <div class = "form-group">
@@ -35,7 +37,6 @@
     <%= select_tag  "entity_name_1" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.table_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "model_select" %>
     <button class="add_entity" type="button" disabled="disabled" >Plus</button>
     <%=  tag("div", class:"span10 offset1 entity_above" , id: "entity_above_1" ) %>
-      <%#=render partial:'shared/query_select_fields' ,locals: {field: @project.entities.first.fields,counter: "1"}%>
     </div>
   </div>
     

@@ -8,9 +8,6 @@ class Project < ActiveRecord::Base
   validates :host, presence: true
   validates :adapter, presence: true
   validates :dbusername, presence: true
-  
   validates :dbname , presence: true
-  validates :dbpassword, presence: true
-  #has_many :helping_users , through: :accesss, source: :project 
-  attr_accessible :name, :description, :dbpassword, :dbusername, :adapter ,:host,:user_id ,:dbname
+  attr_accessible :name, :description, :dbusername, :adapter ,:host,:user_id ,:dbname
 end

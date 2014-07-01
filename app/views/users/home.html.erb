@@ -1,3 +1,9 @@
+<% if current_user.admin? %>
+  <div class="nav navbar-nav pull-right">
+    <%= button_to "Add Sql Functions", new_constraint_path , :class => "btn btn-primary btn-medium", :method => :get %>
+  </div>
+<%end%>
+
 <% owned_projects = current_user.projects %>
 <% collaborating_projects = current_user.collaborating_projects %>
 <% if owned_projects.any? %>

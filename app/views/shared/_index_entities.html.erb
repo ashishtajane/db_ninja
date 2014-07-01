@@ -21,6 +21,6 @@
 
 <div style = "padding: 20px 0 0 0">
   <% if current_user == @owner %>
-    <%=link_to "Add Tables",new_project_entity_path %>
+    <%= button_to "Add Tables", new_project_entity_path, :class => "btn btn-primary btn-medium", :method => :get %>
   <%end%>
 </div>  

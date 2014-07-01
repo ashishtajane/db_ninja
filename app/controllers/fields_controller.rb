@@ -50,12 +50,4 @@ class FieldsController < ApplicationController
       @owner = @project.user
       @entity = Entity.find(params[:entity_id])
     end
-
-    # def owner_of_the_field
-    #   @owner = @project.user
-    #   unless current_user == @owner
-    #     flash[:error] = "Sorry! You are not the owner of this project"
-    #     redirect_to project_entity_path(@project,@entity)
-    #   end
-    # end
 end

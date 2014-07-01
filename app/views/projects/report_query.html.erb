@@ -1,3 +1,5 @@
+<%#= @ashish %>
+
 <% sending_data =[] %>
 <% @making_graph.each do |x| %>
   <%sending_data.push ( x.join("!@#~%$@#!") ) %>
@@ -44,7 +46,7 @@
   <h3> Further Grouping </h3>
   <%= form_tag( report_query_project_path(@project) , method: "post",data: {id: @project.id}) do %>
     <%= hidden_field_tag :coming_from_submit_query, "3" %>
-    <%= hidden_field_tag :project_id , @project.id ,id: "project_id"%>
+    <%=hidden_field_tag :project_id , @project.id ,id: "project_id"%>
     <%= hidden_field_tag :making_graph , sending_data.join("*&^%$#!@"),id: "making_graph" %>
     <%= hidden_field_tag :actual_graph , actual_data.join("*&^%$#!@"),id: "actual_graph" %>  
     <%= hidden_field_tag :header , @header.join("*&^%$#!@"),id: "header" %>
@@ -75,15 +77,3 @@
   <%= column_chart @making_graph %>
 </div>
 
-<%#= bar_chart making_graph %>
-
-
-
-<%#debugger%>
-
-<%#= pie_chart [ [ ["Football"], 10], [["nsdbfldsfgl","Basketball","jksdfto"], 5]] %>
-<%#= pie_chart({ ["Foot ball","sdf"] => 10,["Cjsdksd","sdf"] => 10}) %>
-
-<%#= pie_chart([[23,2,26],[234,1,18]])%>
-
-<%#= pie_chart ({["273", "Johann Zboncak I"]=>26, ["278", "Mr. Jazmin Gorczany"]=>18} )%>

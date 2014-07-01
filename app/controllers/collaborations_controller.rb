@@ -15,8 +15,10 @@ class CollaborationsController < ApplicationController
     if @collaboration.save
       Collaboration.create(:project_id => params[:pid].to_i , :user_id => @user.id)
       flash[:success]  = "Collaborator Added to the project"
-    end
+    else
       flash[:error]  = "Collaborator already exists"
+    end
+      
       redirect_to Project.find(params[:pid].to_i)
   end
 
