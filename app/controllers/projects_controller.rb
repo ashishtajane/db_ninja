@@ -531,7 +531,6 @@ class ProjectsController < ApplicationController
       command = 'mysql -h localhost -D ' +dbname+' -u ' + dbusername + ' -p'+ dbpass + ' -e ' + '"' + query + '"'
       tables = `#{command}`
       tables = tables.split("\n")[1,tables.size]
-      debugger
       tables.each do |t|
         Entity.create(:project_id => project_id.to_s  , :model_name => t ,:table_name=> t)
       end
