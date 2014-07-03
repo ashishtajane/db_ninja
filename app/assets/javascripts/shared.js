@@ -460,6 +460,17 @@ ready = function(){
     bind_functions()
   }
 
+  var Load_Data_From_Db = function(){
+    var selected  = $(this).val();
+    if( selected == "yes"){
+      $(".PasswordDb").show();
+    }
+    else{
+      $(".PasswordDb").hide();
+    }
+    bind_functions();
+  }
+
   var bind_functions = function(){
 
     $(".add_property").off("click").on("click", plus_function);;
@@ -482,6 +493,7 @@ ready = function(){
     $(".change_graph").off("click").on("click",change_graph_ajax_call);
     $(".mean_median").off("change").on("change",get_mean_median_mode);
     $(".Selection").off("change").on("change",show_hide_function);
+    $(".LoadDataDb").off("change").on("change",Load_Data_From_Db);
     // $(".property_dropdown_cons").off("change").on("change",change_constraints_function);
     //$(".add_property").on("click", plus_function);
     //$(".remove_property").on("click", remove_function);

@@ -7,13 +7,17 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.new( project_params)
+    @project = Project.new( :name => params["name"] , :description => params["description"] , :host => params["host"] ,:adapter => params["adapter"], :dbname => params["dbname"],:dbusername =>params["dbusername"])
     @project[:user_id] = current_user.id
     if @project.save
       Collaboration.create(:project_id => @project.id , :user_id => current_user.id)
+      if params["LoadDataDb"] == "yes"
+        add_project( params["dbusername"] , params["dbname"], params["password_of_db"])
+      end
       flash[:success]  = "project Added"
       redirect_to root_url
     else
+      flash[:error] = "Something went wrong"
       render 'new'
     end
   end
@@ -401,9 +405,9 @@ class ProjectsController < ApplicationController
       return from,where
     end
 
-    def project_params
-      params.require(:project).permit(:name,:description, :host, :dbusername,:adapter,:dbname)
-    end
+    # def project_params
+    #   params.require(:project).permit(:name,:description, :host, :dbusername,:adapter,:dbname)
+    # end
 
     def get_instance_variables
       @project = Project.find(params[:id])
@@ -517,5 +521,53 @@ class ProjectsController < ApplicationController
         end
       end
       return constraints
+    end
+
+    def add_project ( dbusername , dbname, dbpass)
+      project_id = @project.id
+      project = @project
+      user_id = @project.user_id
+      query = "show tables"
+      command = 'mysql -h localhost -D ' +dbname+' -u ' + dbusername + ' -p'+ dbpass + ' -e ' + '"' + query + '"'
+      tables = `#{command}`
+      tables = tables.split("\n")[1,tables.size]
+      debugger
+      tables.each do |t|
+        Entity.create(:project_id => project_id.to_s  , :model_name => t ,:table_name=> t)
+      end
+      #project = Project.find(project_id)
+      Collaboration.create(:user_id => user_id.to_i , :project_id => project.id)
+      tables.each do |t|
+        puts t
+        query = "desc " + t
+        command = 'mysql -h localhost -D ' + dbname +' -u ' + dbusername + ' -p'+dbpass+ ' -e ' + '"' + query + '"'
+        value = `#{command}`
+        xyz = value.split("\n")
+        xyz= xyz[1,xyz.size]
+        #puts xyz
+        entity_id = project.entities.find_by_table_name(t).id
+        #entity_id = 100
+        xyz.each do |x|
+          mm = x.split("\t")
+          field_name = mm[0]
+          field_type = mm[1].split('(')[0]
+          null_value = ""
+          default = ""
+          if mm.size <=3
+            default = ""
+          else
+            default = mm[3]
+          end
+          if mm[2] == "YES"
+            null_value = true
+          else
+            null_value = false
+          end
+          #puts field_type.upcase
+          unless field_type.upcase  == "BLOB"
+            a1=Field.create!(:name => field_name , :null_value => null_value , :default => default , :entity_id => entity_id.to_s, :type_arg1 =>"" ,:type_arg2 =>"",:datatype_id => Datatype.find_by_name(field_type.upcase).id )
+          end
+        end
+      end
     end
 end
