@@ -56,11 +56,11 @@
 
     <div class = "form-group PasswordDb" style = "display: none;">
       <%= label_tag "Enter your database password"%>
-      <%= password_field_tag(:password_of_db) %>
+      <%= password_field_tag(:password_of_db,nil , class: "db_password_new") %>
       <%#= password_field_tag  "PasswordDb" ,class: "PasswordDb",style: "display:none;" %>
     </div>
 
-    <%= submit_tag("Create my project" , class: "btn btn-large btn-primary") %>
+    <%= submit_tag("Create my project" , class: "btn btn-large btn-primary create_new_project") %>
     <% end %>
   </div>
 </div>

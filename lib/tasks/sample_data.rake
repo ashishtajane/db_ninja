@@ -140,6 +140,8 @@ def add_constraints
   c=Constraint.create(display_content: "trim begining and end spaces", function_type: FunctionReturnType.find_by_name("string").id,sql_syntax: "ltrim",function_return_type_id: FunctionReturnType.find_by_name("string").id)
 
   c=Constraint.create(display_content: "get right x characters", function_type: FunctionReturnType.find_by_name("string").id,sql_syntax: "RIGHT",function_return_type_id: FunctionReturnType.find_by_name("string").id)
+  # c=Constraint.create(display_content: "Find the day", function_type: FunctionReturnType.find_by_name("datetime").id,sql_syntax: "DAYNAME",function_return_type_id: FunctionReturnType.find_by_name("string").id)
+
   Argument.create!(:name => "length x",:type => FunctionReturnType.find_by_name("integer").id , :constraint_id =>c.id)
 
 end

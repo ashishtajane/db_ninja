@@ -471,6 +471,24 @@ ready = function(){
     bind_functions();
   }
 
+  var Check_Password_Field = function(event){
+    var value = $(".submit_query_password").val()
+    if(value == ""){
+      event.preventDefault();
+      alert("Please Enter Password to access")
+    }
+    bind_functions()
+  }
+
+  var Check_Password_New = function(event){
+    var value = $(".db_password_new").val()
+    if(value == ""){
+      event.preventDefault();
+      alert("Please Enter Password")
+    }
+    bind_functions()
+  }
+
   var bind_functions = function(){
 
     $(".add_property").off("click").on("click", plus_function);;
@@ -494,6 +512,8 @@ ready = function(){
     $(".mean_median").off("change").on("change",get_mean_median_mode);
     $(".Selection").off("change").on("change",show_hide_function);
     $(".LoadDataDb").off("change").on("change",Load_Data_From_Db);
+    $(".submit_submit_query").off("click").on("click",Check_Password_Field);
+    $(".create_new_project").off("click").on("click",Check_Password_New);
     // $(".property_dropdown_cons").off("change").on("change",change_constraints_function);
     //$(".add_property").on("click", plus_function);
     //$(".remove_property").on("click", remove_function);

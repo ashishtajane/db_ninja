@@ -6,6 +6,9 @@
 
 <% owned_projects = current_user.projects %>
 <% collaborating_projects = current_user.collaborating_projects %>
+<% if owned_projects.size == 0 and collaborating_projects.size== 0 %>
+  <h3> Currently you are not the owner or the collaborator of any project , please add your project from the top right link</h3>
+<%end%>
 <% if owned_projects.any? %>
   <h1> Owned Projects </h1>
   <table class="table table-striped">
