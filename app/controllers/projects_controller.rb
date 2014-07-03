@@ -34,6 +34,7 @@ class ProjectsController < ApplicationController
   end
 
   def submit_query
+
     @joining_params = []
     @all_entities = @project.entities
     @all_entities.each do
@@ -52,6 +53,7 @@ class ProjectsController < ApplicationController
   def report_query
     @header = []
     @actual_header = []
+
     if ( params["coming_from_submit_query"] =="1")
       param = params.sort_by {|x,y| x}
 
@@ -96,14 +98,18 @@ class ProjectsController < ApplicationController
       group_map.each { 
         |x,y| 
         flag=false
+        store_counter_id = ""
         y.each do
           |str|
           unless separate_where.include? str.split("_")[0]
+            store_counter_id = str.split("_")[0]
             flag=true
           end
         end
         if flag 
-          array_for_grouping.push(x[0]+"."+x[1])
+          string_value = "grouping_function_"+store_counter_id
+          function_name_is = params[string_value] + "("
+          array_for_grouping.push(function_name_is + x[0]+"."+x[1] +')')
         end
       }
       @header =  array_for_grouping + @header 

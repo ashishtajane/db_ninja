@@ -61,7 +61,7 @@ ready = function(){
 
   var plus_function = function(){
     //alert("Heel")
-    console.log("plus_function")
+    //console.log("plus_function")
     var curr= $(this);
     $(this).attr("disabled",true);
     var to_add=$(this).parent().clone();
@@ -82,7 +82,7 @@ ready = function(){
     // alert("Plus Function")
     //$('<button type="button" class="remove_property">Remove</button>').insertBefore();
     curr.remove();
-    console.log("exiting plus_function")
+    //console.log("exiting plus_function")
     bind_functions();
   }
 
@@ -199,7 +199,12 @@ ready = function(){
     var add = $(this).parent().clone();
     add.find('.Properties').remove();
     add.attr('id',string_manipulation(1,add.attr('id')));
+    var grouping_function = add.find(".GroupFunction");
+    grouping_function.attr('id', string_manipulation(2,grouping_function.attr('id')));
+    grouping_function.attr('name', string_manipulation(2,grouping_function.attr('name')));
+    grouping_function.hide()
     var parameter = add.find(".Selection") ;
+    parameter.attr('id',string_manipulation(1,parameter.attr('id')));
     parameter.attr('name',string_manipulation(1,parameter.attr('name')));
     var sel_option= add.find('.model_select');
     sel_option.attr('name',string_manipulation(2,sel_option.attr('name')));
@@ -442,6 +447,18 @@ ready = function(){
     }
     bind_functions()
   }
+  var show_hide_function = function(){
+    var selected = $(this).val()
+    console.log(selected)
+    if ( selected == "where"){
+      $(this).parent().parent().find('.GroupFunction').hide()
+    }
+    else{
+      console.log('Hi')
+      $(this).parent().parent().find('.GroupFunction').show()
+    }
+    bind_functions()
+  }
 
   var bind_functions = function(){
 
@@ -464,6 +481,7 @@ ready = function(){
     $("#operation").off("change").on("change",enable_graph_function);
     $(".change_graph").off("click").on("click",change_graph_ajax_call);
     $(".mean_median").off("change").on("change",get_mean_median_mode);
+    $(".Selection").off("change").on("change",show_hide_function);
     // $(".property_dropdown_cons").off("change").on("change",change_constraints_function);
     //$(".add_property").on("click", plus_function);
     //$(".remove_property").on("click", remove_function);

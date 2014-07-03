@@ -30,9 +30,13 @@
     <button class="select_add" type="button" disabled="disabled" >Plus</button>
   </div>
   <h3 class="Entities" style = "display:none;"> Choose Grouping Parameters </h3>
+  <% @all_constraints = Constraint.where("function_type != ?", [-1]) %>
   <div class="Entities" id="entity_1" style = "display:none;">
     <div class="form-group">
       <%= select_tag( :sadsa, options_for_select( [["select me for giving conditon", "where"],["select me for grouping","group"]] ),id: "selection_1" , name: "selection_1",class: "Selection" ) %>
+    </div>
+    <div class="form-group">
+      <%= select_tag( :sadsa, options_for_select(@all_constraints.collect{|d| [d["display_content"],d["sql_syntax"]] }.insert(0,"") ),id: "grouping_function_1" , name: "grouping_function_1",class: "GroupFunction",style: 'display: none;' ) %>
     </div>
     <%= select_tag  "entity_name_1" ,   options_for_select( @project.entities.collect{ |d| [ d.model_name , d.table_name , {data: { arg: d.id}}] }.insert(0,"") ) , class: "model_select" %>
     <button class="add_entity" type="button" disabled="disabled" >Plus</button>
